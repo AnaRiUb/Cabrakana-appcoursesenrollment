@@ -1,0 +1,15 @@
+/* NavBar.css */
+.navbar {
+    flex-grow: 1;
+    text-decoration: none;
+    color: white;
+  }
+  
+  .navbar-title {
+    flex-grow: 1;
+  }
+  
+  .navbar-button {
+    color: white;
+  }
+  
