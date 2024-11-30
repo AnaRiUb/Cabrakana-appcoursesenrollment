@@ -22,8 +22,8 @@ const ForumList: React.FC<ForumListProps> = ({ forums }) => {
           title={forum.title}
           description={forum.description}
           author={forum.author}
-          createdAt={forum.createdAt}
-        />
+          createdAt={forum.createdAt} 
+          image={''}        />
       ))}
     </div>
   );

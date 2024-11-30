@@ -1,14 +1,14 @@
 import React from 'react';
-import './CoursesPage.css';
-import SearchButton from '../components/Buttons/SearchButton';
+import ImageCarousel from '../components/Carousel/ImageCarousel';
 
 const CoursesPage: React.FC = () => {
   
   return (
     <div>
-      <h1>Courses Page</h1>
-      <SearchButton/>
-   
+
+      <ImageCarousel />
+      
+
     </div>
   );
 };

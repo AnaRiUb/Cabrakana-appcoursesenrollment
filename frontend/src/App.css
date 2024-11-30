@@ -12,11 +12,13 @@
 
 
 body {
-  background: linear-gradient(to bottom, #ebff93, #b8649f); /* Cambia este color por el tono de verde que prefieras */
+  background: linear-gradient(to bottom, #ebff93, #b8649f);
   margin: 0;
-  font-family: "Roboto", sans-serif; /* Asegúrate de que el estilo de fuente sea consistente */
+  font-family: "Roboto", sans-serif;
   background-repeat: no-repeat;
   background-attachment: fixed;
+  background-size: cover;
+  background-repeat: no-repeat;
 }
 
 @media (prefers-reduced-motion: no-preference) {
@@ -47,4 +49,24 @@ body {
   to {
     transform: rotate(360deg);
   }
+}
+
+.app-container {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+
+.main-content {
+  flex: 1;
+  padding: 20px;
+
+}
+
+
+.footer {
+  background-color: #ffffff62;
+  text-align: center;
+  padding: 10px;
 }

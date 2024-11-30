@@ -1,12 +1,19 @@
 import React from 'react';
-import './LoginPage.css';
+import LoginForm from '../components/Forms/LoginForm';
+
 
 const LoginPage: React.FC = () => {
   return (
     <div>
-      <h1>Login Page</h1>
-      
+        <body className='flex justify-center items-center'>
+          
+        
+        <LoginForm />
+
+        </body> 
     </div>
+  
+
   );
 };
 

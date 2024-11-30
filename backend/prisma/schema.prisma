@@ -1,0 +1,102 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum Gender {
+  Hombre
+  Mujer
+  Prefiero_no_decirlo
+}
+
+
+model User {
+  user_id       String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  username      String    @db.VarChar(50)
+  email         String    @unique @db.VarChar(100)
+  password      String?   @db.VarChar(255) // null si usa Google
+  google_id     String?   @db.VarChar(255)
+  gender        String    @default("Prefiero no decirlo")
+  profile_image String    @default("default_profile.png") @db.VarChar(255)
+  created_at    DateTime  @default(now()) @db.Timestamp
+
+  forums        Forum[]   @relation("UserForums")
+  events        Event[]   @relation("UserEvents")
+  forumComments ForumComment[]
+  forumFollowers ForumFollower[]
+  eventFollowers EventFollower[]
+}
+
+model Course {
+  course_id   String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  title       String   @db.VarChar(100)
+  description String   @db.Text
+  image_url   String?  @db.VarChar(255)
+  price       Decimal  @db.Decimal(10, 2) 
+  course_code String   @unique @db.VarChar(20)
+  created_at  DateTime @default(now()) @db.Timestamp
+}
+
+model Forum {
+  forum_id    String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  title       String   @db.VarChar(100)
+  description String   @db.Text
+  created_by  String   @db.Uuid
+  created_at  DateTime @default(now()) @db.Timestamp
+
+  creator     User     @relation("UserForums", fields: [created_by], references: [user_id])
+  comments    ForumComment[]
+  followers   ForumFollower[]
+}
+
+model ForumComment {
+  comment_id    Int      @id @default(autoincrement())
+  forum_id      String   @db.Uuid
+  user_id       String   @db.Uuid
+  comment_text  String   @db.Text
+  comment_date  DateTime @db.Date
+  comment_time  DateTime @db.Time
+
+  forum         Forum    @relation(fields: [forum_id], references: [forum_id])
+  user          User     @relation(fields: [user_id], references: [user_id])
+}
+
+model ForumFollower {
+  follower_id String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  forum_id    String   @db.Uuid
+  user_id     String   @db.Uuid
+  followed_at DateTime @default(now()) @db.Timestamp
+
+  forum       Forum    @relation(fields: [forum_id], references: [forum_id])
+  user        User     @relation(fields: [user_id], references: [user_id])
+}
+
+model Event {
+  event_id       String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  title          String   @db.VarChar(100)
+  description    String   @db.Text
+  event_date     DateTime @db.Date
+  event_image_url String?  @db.VarChar(255)
+  location       String   @db.Text
+  latitude       Decimal? @db.Decimal(10, 8)
+  longitude      Decimal? @db.Decimal(11, 8)
+  created_by     String   @db.Uuid
+  created_at     DateTime @default(now()) @db.Timestamp
+
+  creator        User     @relation("UserEvents", fields: [created_by], references: [user_id])
+  followers      EventFollower[]
+}
+
+model EventFollower {
+  follower_id String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  event_id    String   @db.Uuid
+  user_id     String   @db.Uuid
+  followed_at DateTime @default(now()) @db.Timestamp
+
+  event       Event    @relation(fields: [event_id], references: [event_id])
+  user        User     @relation(fields: [user_id], references: [user_id])
+}

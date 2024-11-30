@@ -1,6 +1,5 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
-import './NavBar.css';
 
 const ButtonHome: React.FC = () => {
   const navigate = useNavigate();
@@ -19,7 +18,7 @@ const ButtonHome: React.FC = () => {
         cursor: "pointer",
       }}
     >
-      <img className="icon" src="./svg/mi-icono.svg" alt="Home" width="60" height="60" />
+      <img className=" rounded-full bg-pink-200/75" src="./svg/mi-icono.svg" alt="Home" width="60" height="60" />
     </button>
   );
 };

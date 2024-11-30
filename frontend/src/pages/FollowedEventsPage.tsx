@@ -1,5 +1,4 @@
 import React from 'react';
-import './CoursesPage.css';
 
 const CoursesPage: React.FC = () => {
   

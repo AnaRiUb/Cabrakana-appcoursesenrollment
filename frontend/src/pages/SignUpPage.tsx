@@ -1,11 +1,16 @@
 import React from 'react';
-import './SignUpPage.css';
+import SignUpForm from '../components/Forms/SignUpForm';
 
 const SignUpPage: React.FC = () => {
   return (
+    
     <div>
-      <h1>SignUp Page</h1>
-      
+        <body className='flex justify-center items-center'>
+          
+        
+        <SignUpForm />
+
+        </body> 
     </div>
   );
 };
