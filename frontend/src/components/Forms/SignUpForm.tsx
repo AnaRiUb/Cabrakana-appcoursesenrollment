@@ -9,18 +9,48 @@ const SignUpForm: React.FC = () => {
   const [password, setPassword] = useState<string>('');
   const [confirmPassword, setConfirmPassword] = useState<string>(''); // Estado para repetir contraseña
 
-  const handleSubmit = (event: React.FormEvent) => {
+  const handleSubmit = async (event: React.FormEvent) => {
     event.preventDefault();
-
     
 
     if (password !== confirmPassword) {
       alert('Las contraseñas no coinciden');
       return;
     }
+    
+    const userData = {
+      name,
+      username,
+      email,
+      password,
+    };
+  
 
     console.log('Registro de usuario:', { name, username, email, password });
+    try {
+      const response = await fetch('http://localhost:3000/api/users/register', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(userData),
+      });
+  
+      if (!response.ok) {
+        const errorData = await response.json();
+        alert(`Error: ${errorData.message}`);
+        return;
+      }
+  
+      const data = await response.json();
+      alert('Usuario registrado con éxito');
+      console.log('Registro exitoso:', data);
+    } catch (error) {
+      console.error('Error durante el registro:', error);
+      alert('Hubo un problema durante el registro. Intenta nuevamente.');
+    }
   };
+  
 
   return (
     <section className="bg-pink-500/20 rounded-lg px-2 py-2 h-auto w-2/3">

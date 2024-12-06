@@ -21,7 +21,7 @@ const LoginForm: React.FC = () => {
 
         <div className="md:w-1/2 bg-white rounded-lg shadow md:mt-0 sm:max-w-md">
               <div className="p-6 space-y-4 md:space-y-6 sm:p-8">
-                <Link to="/" className="flex justify-center items-center flex mb-6 text-2xl font-semibold text-pink-500">
+                <Link to="/" className="flex justify-center items-center mb-6 text-2xl font-semibold text-pink-500">
                   Piwis
                   <img className="rounded-full bg-pink-50 w-8 h-8 mr-2" src="/svg/mi-icono.svg" alt="logo" />
                 </Link>
@@ -105,7 +105,9 @@ const LoginForm: React.FC = () => {
                   >
                     Iniciar sesión
                   </button>
-                <GoogleLoginButton />              
+                      <div className='flex justify-center'>
+                          <GoogleLoginButton />              
+                      </div>
                 <p className="text-sm font-light text-center text-gray-500">
                     ¿No tienes una cuenta aún?{' '}
                     <Link to="/signup" className="font-medium text-primary-600 text-purple-700 hover:underline">
@@ -116,7 +118,7 @@ const LoginForm: React.FC = () => {
               </div>
         </div>
 
-        <div className=" md:flex md:justify-center md:items-center hidden md:w-1/2 md:block md:p-5 m-8 mt-6">
+        <div className=" md:flex md:justify-center md:items-center hidden md:w-1/2 md:p-5 m-8 mt-6">
           <img className="rounded-full bg-pink-50   h-auto" src="/svg/Login-icon.svg" alt="logo" />
         </div>
 

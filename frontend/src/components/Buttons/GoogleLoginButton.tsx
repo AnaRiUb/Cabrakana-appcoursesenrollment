@@ -36,6 +36,7 @@ const GoogleLoginButton: React.FC = () => {
   };
 
   return (
+    
     <GoogleLogin
       onSuccess={handleGoogleLoginSuccess}
       onError={handleGoogleLoginFailure}

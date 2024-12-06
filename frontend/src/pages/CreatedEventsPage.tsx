@@ -13,7 +13,6 @@ interface Event {
   lng: number;
 }
 
-
 const CreatedEventsPage: React.FC = () => {
   const [events, setEvents] = useState<Event[]>([
     {
@@ -42,13 +41,15 @@ const CreatedEventsPage: React.FC = () => {
     setEvents((prevEvents) => [...prevEvents, newEvent]);
   };
 
+  // Aquí debes definir el user_id, por ejemplo, el ID del usuario autenticado.
+  const userId = "12345"; // Reemplaza esto con el ID real del usuario.
+
   return (
     <div className="p-6">
       <div className="flex justify-between items-center mb-4">
         <h1 className="text-2xl font-bold">Mis eventos</h1>
-        <MyCreatedEventButton onCreate={function (event: { id: string; title: string; description: string; date: string; image: string; location: string; }): void {
-          throw new Error("Function not implemented.");
-        } } />
+        {/* Pasa el user_id a MyCreatedEventButton */}
+        <MyCreatedEventButton user_id={userId} onCreate={addNewEvent} />
       </div>
 
       <div className="bg-gray-100 p-4 rounded-lg shadow-md">

@@ -1,17 +1,17 @@
 import React from "react"; 
 import { Link } from "react-router-dom";
-import { useAuth } from "../context/AuthContext"; // Asegúrate de importar correctamente el hook
+import { useAuth } from "../context/AuthContext";
 import ImageCarouselHome from "../components/Carousel/ImageCarouselHome";
 
 const HomePage: React.FC = () => {
   const { token } = useAuth(); // Obtén el token del contexto (si está autenticado o no)
   
-  // Asumimos que tienes el nombre del usuario disponible, si es así, puedes acceder a él desde el contexto
+
   const userName = "Usuario"; // Esto debería venir de tu backend o contexto si está disponible
 
   return (
     <div className="bg-gray-50 min-h-screen p-6">
-      {/* Sección de bienvenida para no autenticados */}
+   
       {!token && (
         <section className="flex gap-6 flex-col items-center justify-center text-center bg-gradient-to-r from-indigo-500 to-purple-600 text-white py-16 px-8 rounded-lg shadow-xl">
           <h1 className="text-4xl font-bold mb-4">Bienvenidos a Piwis</h1>
@@ -35,7 +35,7 @@ const HomePage: React.FC = () => {
         </section>
       )}
 
-      {/* Sección de bienvenida para usuarios autenticados */}
+     
       {token && (
         <section className="flex gap-6 flex-col items-center justify-center text-center bg-gradient-to-r from-green-500 to-blue-600 text-white py-16 px-8 rounded-lg shadow-xl">
           <h1 className="text-4xl font-bold mb-4">¡Bienvenido(a), {userName}!</h1>
@@ -45,17 +45,22 @@ const HomePage: React.FC = () => {
         </section>
       )}
 
-      {/* Carousel Section */}
-      <section className="my-12">
-        <h2 className="text-2xl font-bold text-center mb-8 text-gray-700">Descubre Nuestros Cursos Destacados</h2>
-        <div className="bg-gray-100 h-48 rounded-lg shadow-md flex items-center justify-center">
-          <p className="text-gray-500"> <ImageCarouselHome /> </p>
-        </div>
+
+      <section className="my-12 p-4 lg:w-4/5 h-auto mx-auto">
+          <div className="p-4 flex justify-center">
+            <ImageCarouselHome />
+          </div>
+
+          <h2 className="text-2xl font-bold text-center my-8 text-gray-700">
+            Descubre Nuestros Cursos Destacados
+          </h2>
+        
+         
       </section>
 
-      {/* Sección de Cursos, Foros, y Eventos */}
+
       <section className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-        {/* Cursos */}
+    
         <div className="bg-white shadow-lg rounded-lg p-6 text-center transition-transform hover:scale-105 duration-300">
           <h3 className="text-xl font-bold mb-4 text-indigo-600">Cursos</h3>
           <p className="text-gray-600 mb-4">

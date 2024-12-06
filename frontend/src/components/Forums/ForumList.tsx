@@ -1,5 +1,5 @@
 import React from 'react';
-import ForumCard from './ForumCard';
+import ForumCard from '../Forums/ForumCard';
 
 interface Forum {
   id: string;

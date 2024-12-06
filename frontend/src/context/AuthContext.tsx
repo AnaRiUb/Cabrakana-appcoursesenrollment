@@ -1,4 +1,5 @@
 import React, { createContext, useContext, useState, ReactNode } from 'react';
+//import { GoogleLogin } from '@react-oauth/google';
 
 // Definir el tipo para el contexto
 interface AuthContextType {
@@ -15,6 +16,7 @@ const AuthContext = createContext<AuthContextType | undefined>(undefined);
 export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
   const [token, setToken] = useState<string | null>(null);
 
+  
   // Función para iniciar sesión
   const login = (token: string) => {
     setToken(token);

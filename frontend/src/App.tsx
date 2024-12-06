@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
-import { AuthProvider } from "./context/AuthContext";
+import { AuthProvider, useAuth } from "./context/AuthContext";
 import FooterDesktopandMobile from './components/Footer/FooterDesktopandMobile';
 import NavBar from './components/Navbar/NavBar';
 import HomePage from './pages/HomePage';
@@ -15,12 +15,17 @@ import FollowedEventsPage from './pages/FollowedEventsPage';
 import EditProfilePage from './pages/EditProfilePage';
 import ProfilePage from './pages/ProfilePage';
 import CreatedForumPage from './pages/CreatedForumPage';
+
 import './App.css';
 import './index.css';
+import Login from './components/Forms/LoginState';
+
+
 
 const App: React.FC = () => {
-  const [isAuthenticated, setIsAuthenticated] = useState(false); 
-
+ //const { token } = useAuth();
+ const [isAuthenticate, setIsAuthenticated] = useState(false); 
+  
   const handleLogin = () => {
     setIsAuthenticated(true);
   };
@@ -30,20 +35,38 @@ const App: React.FC = () => {
     console.log('Usuario cerró sesión');
   };
 
-
-  return (
-    <AuthProvider>
-        <Router> 
-          <div className="app-container">
-            <header>
-          <NavBar isAuthenticated={isAuthenticated} onLogout={handleLogout} />
+/*
+<NavBar isAuthenticated={isAuthenticated} onLogout={logout} />
           {!isAuthenticated ? (
             <button onClick={handleLogin} style={{ margin: '20px', padding: '10px' }}>
               Iniciar Sesión
             </button>
           ) : (
-            <p style={{ margin: '20px' }}>Bienvenido, estás autenticado.</p>
+            <p style={{ margin: '20px' }}>
+            Bienvenido, estás autenticado. {userName && `Nombre: ${userName}`}
+          </p>
           )}
+          */
+  return (
+    <AuthProvider>
+
+        <Router> 
+          <div className="app-container">
+            <Login />
+            <header>
+          <NavBar isAuthenticated={isAuthenticate} onLogout={handleLogout} />
+          {!isAuthenticate ? (
+            <button onClick={handleLogin} style={{ margin: '20px', padding: '10px' }}>
+              Iniciar Sesión
+            </button>
+          ) : (
+            <p style={{ margin: '20px' }}>
+            Bienvenido, estás autenticado. {`Nombre:`}
+          </p>
+          )}
+
+
+      
             </header>
 
             <main className="main-content">
