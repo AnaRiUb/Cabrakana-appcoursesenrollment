@@ -1,4 +1,4 @@
-import React from 'react';
+import React from 'react'; 
 import { Link } from 'react-router-dom';
 import NotificationBadge from '../Common/NotificationBadge';
 
@@ -14,26 +14,24 @@ const ProfileButton: React.FC<ProfileButtonProps> = ({
   notificationCount,
 }) => {
   return (
-    <div className="flex justify-center items-center space-x-4">
+    <div className="flex flex-col sm:flex-row sm:justify-start md:justify-center">
       {/* Imagen de perfil con NotificationBadge */}
       <div className="relative w-12 h-12">
-       <Link to="/edit-profile"> 
-       <img
-          src={profileImageUrl}
-          alt="Imagen de perfil"
-          className="w-full h-full rounded-full object-cover border border-gray-300"
-        />
-
-       </Link>
-
-      {/* Badge */}
-        <NotificationBadge count={10} />
+        <Link to="/edit-profile"> 
+          <img
+            src={profileImageUrl}
+            alt="Imagen de perfil"
+            className="mx-10 sm:mx-0 flex justify-center items-center w-full h-full rounded-full object-cover border border-none"
+          />
+        </Link>
+        {/* Badge */}
+        <NotificationBadge count={10000} />
       </div>
 
       {/* Botón Mi Perfil */}
       <Link
         to="/profile"
-        className="bg-pink-200/75 p-2 m-2 rounded-lg shadow-sm hover:bg-pink-200 cursor-pointer"
+        className="bg-pink-200/75 p-2 m-2 rounded-full shadow-sm text-center hover:bg-pink-200 cursor-pointer"
       >
         Mi Perfil
       </Link>
@@ -42,16 +40,13 @@ const ProfileButton: React.FC<ProfileButtonProps> = ({
       {onLogout && (
         <button
           onClick={onLogout}
-          className="bg-pink-200/75 p-2 m-2 rounded-lg shadow-sm hover:bg-pink-200 cursor-pointer"
+          className="bg-pink-200/75 p-2 m-2 rounded-full shadow-sm text-center hover:bg-pink-200 cursor-pointer"
         >
-          Cerrar sesión
+          Cerrar sesión :P
         </button>
       )}
-
     </div>
   );
 };
 
-
 export default ProfileButton;
-

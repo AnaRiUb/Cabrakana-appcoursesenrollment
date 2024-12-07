@@ -45,15 +45,14 @@ const NavBar: React.FC<NavBarProps> = ({ isAuthenticated, onLogout }) => {
             <Link to="/events" className="text-[#813838] hover:text-[#44e960] no-underline">
               Eventos
             </Link>
+
           </li>
           {isAuthenticated ? (
-            <li>
-              <ProfileButton 
+            <li className='flex flex-row'>
+              <ProfileButton
               profileImageUrl={''} 
-              notificationCount={0}
-              onLogout={() => console.log('Sesión cerrada')}
-              
-               />
+              notificationCount={5}
+              onLogout={() => console.log('Sesión cerrada')}/>
             </li>
           ) : (
             <>
@@ -92,7 +91,7 @@ const NavBar: React.FC<NavBarProps> = ({ isAuthenticated, onLogout }) => {
           </Link>
         </div>
 
-        <div className={`fixed top-0 left-0 w-2/5 h-full bg-black bg-opacity-90 p-8 shadow-lg flex flex-col items-start z-10 transition-transform ${
+        <div className={`fixed top-0 left-0 w-/5 h-full bg-black bg-opacity-90 p-8 shadow-lg flex flex-col items-start z-10 transition-transform ${
             isOpen ? 'translate-x-0' : '-translate-x-full'
           }`} >
             
@@ -102,35 +101,28 @@ const NavBar: React.FC<NavBarProps> = ({ isAuthenticated, onLogout }) => {
           > x
           </button>
 
-          <ul className=" list-none mt-8 space-y-4 text-lg">
-          <li>Piwis</li>
+          <ul className=" flex flex-col list-none mt-8 space-y-4 text-lg">
+            
+            <Link className='text-center mb-4' to="/">Piwis XD</Link>
 
-          {isAuthenticated ? (
+           {isAuthenticated ? (
               <li>
                 <ProfileButton 
                 profileImageUrl={''} 
                 notificationCount={0}
                 onLogout={() => console.log('Sesión cerrada')}
                  />
-              </li>
-            ) : (
-              <>
-                <li>
-                  <Link
-                    to="/login"
-                    onClick={toggleMenu}
-                    className="text-white hover:text-[#ffa500] no-underline"
-                  >
-                    Iniciar Sesión
+              </li> ) : ( <>
+              
+              <li>
+                  <Link  className="text-white hover:text-[#ffa500] no-underline" to="/login" onClick={toggleMenu}>
+                    Iniciar Sesión XD
                   </Link>
-                </li>
-                <li>
-                  <Link
-                    to="/signup"
-                    onClick={toggleMenu}
-                    className="text-white hover:text-[#ffa500] no-underline"
-                  >
-                    Registrarse
+              </li>
+
+              <li>
+                  <Link className="text-white hover:text-[#ffa500] no-underline" to="/signup" onClick={toggleMenu}>
+                    Registrarse XD
                   </Link>
                 </li>
               </>

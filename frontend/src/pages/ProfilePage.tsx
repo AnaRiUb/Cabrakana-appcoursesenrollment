@@ -49,7 +49,7 @@ const ProfilePage: React.FC<ProfilePageProps> = ({
       <div className="flex justify-center">
         <button
           onClick={handleEditProfile}
-          className="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600 transition duration-200"
+          className="bg-pink-500 text-white px-4 py-2 rounded-lg hover:bg-pink-600 transition duration-200"
         >
           Editar Perfil
         </button>

@@ -64,15 +64,16 @@ const EditProfilePage: React.FC<EditProfilePageProps> = ({
   return (
     <div className="max-w-2xl mx-auto mt-10 bg-white shadow-lg p-6 rounded-lg">
       <h2 className="text-2xl font-bold mb-4">Editar Perfil</h2>
+      
       <form onSubmit={handleSubmit}>
         {/* Foto de Perfil */}
         <div className="mb-6">
-          <label className="block text-sm font-medium text-gray-700 mb-2">Foto de Perfil</label>
-          <div className="flex items-center">
+          <label className="block text-m font-medium text-gray-700 mb-6">Foto de Perfil</label>
+          <div className="flex flex-col items-center m-2 gap-2">
             <img
-              src={newAvatar}
+              src="svg/nottellingicon.svg"
               alt="Foto de perfil"
-              className="w-20 h-20 rounded-full object-cover mr-4"
+              className="w-20 h-auto rounded-full object-cover border mr-4"
             />
             <input
               type="file"
@@ -144,24 +145,27 @@ const EditProfilePage: React.FC<EditProfilePageProps> = ({
           />
         </div>
 
-        {/* Mostrar u Ocultar Edad */}
-        <div className="mb-6 flex items-center">
-          <input
-            type="checkbox"
-            checked={ageVisible}
-            onChange={(e) => setAgeVisible(e.target.checked)}
-            className="mr-2"
-          />
-          <label className="text-sm text-gray-700">¿Mostrar mi edad en el perfil?</label>
-        </div>
+       <div className='flex flex-col items-center'>
+          <div className="mb-6">
+            <input
+              type="checkbox"
+              checked={ageVisible}
+              onChange={(e) => setAgeVisible(e.target.checked)}
+              className="mr-2"
+            />
+            <label className="text-sm text-gray-700">¿Mostrar mi edad en el perfil?</label>
+          </div>
 
-        {/* Botón Guardar */}
-        <button
-          type="submit"
-          className="bg-green-500 text-white px-4 py-2 rounded-lg hover:bg-green-600 transition duration-200"
-        >
-          Guardar Cambios
-        </button>
+          {/* Botón Guardar */}
+          <button
+            type="submit"
+            className=" bg-pink-500 text-white px-4 py-2 rounded-full hover:bg-green-600 transition duration-200"
+          >
+            Guardar Cambios
+          </button>
+      
+      </div>
+
       </form>
     </div>
   );

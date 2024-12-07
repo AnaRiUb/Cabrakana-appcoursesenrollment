@@ -35,18 +35,6 @@ const App: React.FC = () => {
     console.log('Usuario cerró sesión');
   };
 
-/*
-<NavBar isAuthenticated={isAuthenticated} onLogout={logout} />
-          {!isAuthenticated ? (
-            <button onClick={handleLogin} style={{ margin: '20px', padding: '10px' }}>
-              Iniciar Sesión
-            </button>
-          ) : (
-            <p style={{ margin: '20px' }}>
-            Bienvenido, estás autenticado. {userName && `Nombre: ${userName}`}
-          </p>
-          )}
-          */
   return (
     <AuthProvider>
 
@@ -56,13 +44,13 @@ const App: React.FC = () => {
             <header>
           <NavBar isAuthenticated={isAuthenticate} onLogout={handleLogout} />
           {!isAuthenticate ? (
-            <button onClick={handleLogin} style={{ margin: '20px', padding: '10px' }}>
+            <button className='bg-pink-400 rounded-full m-4 p-4 font-bold shadow-md ' onClick={handleLogin}>
               Iniciar Sesión
             </button>
           ) : (
-            <p style={{ margin: '20px' }}>
-            Bienvenido, estás autenticado. {`Nombre:`}
-          </p>
+            <p className=' flex justify-center items-center text-center m-4'>
+            Bienvenido {`Nombre`} , estás autenticado.
+            </p>
           )}
 
 

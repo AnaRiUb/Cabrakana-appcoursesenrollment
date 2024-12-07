@@ -15,7 +15,7 @@ const FooterDesktopandMobile: React.FC = () => {
   };
 
   return (
-    <footer className="text-center box-border bg-pink-200/50 ">
+    <footer className="text-center box-border bg-black sm:bg-white/75">
       {isDesktop && (
         <div className="flex justify-between items-start p-6">
           <div className="w-1/2 px-5">
@@ -36,6 +36,8 @@ const FooterDesktopandMobile: React.FC = () => {
           </div>
         </div>
       )}
+
+  {/*movil*/}
 
 {isMobile && (
   <div className="flex justify-between bg-none gap-1">
@@ -97,15 +99,15 @@ const FooterDesktopandMobile: React.FC = () => {
     ].map((item) => (
       <button
         key={item.route}
-        className={`w-1/3 flex flex-col items-center justify-around bg-pink-200/75 gap-2 p-2 shadow-lg border-none rounded-lg cursor-pointer hover:bg-green-300 transition ${
+        className={`w-1/3 flex flex-col items-center justify-around bg-white gap-2 mt-2 p-2 shadow-lg border-none cursor-pointer hover:bg-green-300 transition ${
           activeButton === item.route ? "bg-green-300" : ""
         }`}
         onClick={() => handleButtonClick(item.route)}
       >
-        <div className="rounded-full bg-white/75 w-20 h-20  flex items-center justify-center">
+        <div className="rounded-full bg-white/50 w-20 h-20  flex items-center justify-center">
           {item.icon}
         </div>
-        <p className="text-xs mt-2">{item.label}</p>
+        <p className="text-sm font-bold m-2">{item.label}</p>
       </button>
     ))}
   </div>

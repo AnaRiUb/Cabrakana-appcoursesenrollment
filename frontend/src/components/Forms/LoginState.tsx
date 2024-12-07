@@ -1,4 +1,3 @@
-import React from 'react';
 import { GoogleLogin } from '@react-oauth/google';
 import { jwtDecode } from 'jwt-decode';
 import { useAuth } from '../../context/AuthContext';
@@ -39,11 +38,12 @@ const Login = () => {
 
   return (
     <div>
-      <h1>Inicia sesión</h1>
+
       <GoogleLogin
         onSuccess={handleLoginSuccess}
         onError={handleLoginFailure}
       />
+      
     </div>
   );
 };
