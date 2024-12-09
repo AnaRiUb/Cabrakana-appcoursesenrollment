@@ -9,7 +9,7 @@ app.use(cors());
 app.use(bodyParser.json()); // Para parsear JSON
 
 app.use(express.json());
-app.use('/api', userRoutes);
+app.use('', userRoutes);
 
 const PORT = process.env.PORT || 4000;
 

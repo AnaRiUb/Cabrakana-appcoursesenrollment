@@ -31,6 +31,81 @@ export const createUser = async (username: string, email: string, password: stri
  * @param email - Correo electrónico del usuario.
  * @returns El usuario encontrado o `null` si no existe.
  */
+
+
+
+export const createCourse = async (
+  course_id: string,
+  title: string,
+  description: string,
+  image_url: string | null,
+  price: number,
+  course_code: string,
+  created_at: Date,
+) => {
+  const newCourse = await prisma.course.create({
+    data: {
+    course_id,
+  title,
+  description,
+  image_url,
+  price,
+  course_code,
+  created_at
+},
+  });
+
+  return newCourse;
+};
+
+
+export const createForum = async (
+  forum_id: string,
+  title: string,
+  description: string,
+  created_by: string,
+  created_at: Date,
+) => {
+  const newForum = await prisma.forum.create({
+    data:{
+    forum_id,
+    title,
+    description,
+    created_by,
+    created_at
+  },
+  });
+
+  return newForum;
+};
+
+export const createEvent = async ( event_id: string, title: string, description: string,
+  event_date: Date,
+  event_image_url: string,
+  location: string,
+  latitude: number,
+  longitude: number,
+  created_by: string,
+  created_at: Date,
+) => {
+  const newEvent = await prisma.event.create({
+    data: {
+      event_id,
+      title,
+      description,
+      event_date,
+      event_image_url,
+      location,
+      latitude,
+      longitude,
+      created_by,
+      created_at
+    },
+  });
+
+  return newEvent;
+};
+
 export const getUserByEmail = async (email: string) => {
   const user = await prisma.user.findUnique({
     where: {
