@@ -6,6 +6,7 @@ import { jwtDecode } from 'jwt-decode';
 interface MyToken {
   name: string;
   token: string;
+  email:string;
   // whatever else is in the JWT.
 }
 const GoogleLoginButton: React.FC = () => {
@@ -37,9 +38,30 @@ const GoogleLoginButton: React.FC = () => {
         console.log(decoded2);
           console.log('Usuario decodificado:', decoded);
           localStorage.setItem('userToken', JSON.stringify(decoded2));
-        
+          
+          console.log('Usuario decodificado:', decoded2.email);
           // Redirige a la página de inicio
           navigate('/');
+
+          //Hora de hacer un post con fetch
+          try {
+            const response = await fetch("http://localhost:4000/users/"+ decoded2.email , {
+              method: "GET",
+              headers: {
+                "Content-Type": "application/json",
+              },
+          
+            });
+      
+            const data = await response.json();
+            localStorage.setItem('user_id', data.user_id);
+          console.log(data.user_id);
+          } catch (error) {
+            console.error("Error al traer el user:", error);
+           
+          }
+
+
         } else {
           alert(data.message || 'Error en la autenticación');
         }

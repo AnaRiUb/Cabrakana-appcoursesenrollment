@@ -1,6 +1,6 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import MyCreatedEventButton from "../components/Events/MyCreatedEventButton";
-import { GoogleMap, LoadScript, Marker } from "@react-google-maps/api";
+import { GoogleMap, LoadScript, MarkerF } from "@react-google-maps/api";
 
 interface Event {
   id: string;
@@ -12,44 +12,43 @@ interface Event {
   lat: number;
   lng: number;
 }
-
 const CreatedEventsPage: React.FC = () => {
-  const [events, setEvents] = useState<Event[]>([
-    {
-      id: "1",
-      title: "Hackathon de Tecnología",
-      description: "Un evento para desarrolladores y entusiastas de la tecnología.",
-      date: "2024-12-15",
-      image: "https://via.placeholder.com/150", // Imagen de ejemplo
-      location: "Madrid, España",
-      lat: 40.4168,
-      lng: -3.7038,
-    },
-    {
-      id: "2",
-      title: "Festival de Cine",
-      description: "Disfruta de las mejores películas en este festival único.",
-      date: "2025-01-10",
-      image: "https://via.placeholder.com/150", // Imagen de ejemplo
-      location: "Barcelona, España",
-      lat: 41.3784,
-      lng: 2.1915,
-    },
-  ]);
+  const [events, setEvents] = useState<Event[]>([]);
 
-  const addNewEvent = (newEvent: Event) => {
-    setEvents((prevEvents) => [...prevEvents, newEvent]);
-  };
+  // Obtener el userId del localStorage, o un valor predeterminado si no existe
+  const userId = localStorage.getItem("user_id") || ""; // Si no existe, usa una cadena vacía
 
-  // Aquí debes definir el user_id, por ejemplo, el ID del usuario autenticado.
-  const userId = "12345"; // Reemplaza esto con el ID real del usuario.
+  useEffect(() => {
+    if (userId) { // Verifica que userId no sea vacío
+      const fetchEvents = async () => {
+        try {
+          const response = await fetch(`http://localhost:4000/events/${userId}`);
+          const data = await response.json();
+
+          // Convertir latitud y longitud a números con parseFloat
+          const parsedEvents = data.map((event: any) => ({
+            ...event,
+            lat: parseFloat(event.latitude),
+            lng: parseFloat(event.longitude),
+          }));
+
+          setEvents(parsedEvents);
+        } catch (error) {
+          console.error("Error al obtener los eventos:", error);
+        }
+      };
+
+      fetchEvents();
+    } else {
+      console.error("No se encontró el user_id en localStorage.");
+    }
+  }, [userId]); // Re-llamar a useEffect si userId cambia
 
   return (
     <div className="p-6">
       <div className="flex justify-between items-center mb-4">
         <h1 className="text-2xl font-bold">Mis eventos</h1>
-        {/* Pasa el user_id a MyCreatedEventButton */}
-        <MyCreatedEventButton user_id={userId} onCreate={addNewEvent} />
+        <MyCreatedEventButton user_id={userId} onCreate={(newEvent) => setEvents((prev) => [...prev, newEvent])} />
       </div>
 
       <div className="bg-gray-100 p-4 rounded-lg shadow-md">
@@ -73,14 +72,13 @@ const CreatedEventsPage: React.FC = () => {
                     <p className="text-sm text-gray-500">Fecha: {event.date}</p>
                     <p className="text-sm text-gray-600">Ubicación: {event.location}</p>
                     <div style={{ width: "100%", height: "150px" }}>
-                      {/* Mapa de Google Maps dentro de la tarjeta */}
                       <LoadScript googleMapsApiKey="AIzaSyA6Rat4XB1qcltaTLlea57pEQA8whd-hUU">
                         <GoogleMap
                           center={{ lat: event.lat, lng: event.lng }}
                           zoom={12}
                           mapContainerStyle={{ width: "100%", height: "100%" }}
                         >
-                          <Marker position={{ lat: event.lat, lng: event.lng }} />
+                          <MarkerF position={{ lat: event.lat, lng: event.lng }} />
                         </GoogleMap>
                       </LoadScript>
                     </div>

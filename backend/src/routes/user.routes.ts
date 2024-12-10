@@ -1,17 +1,22 @@
 import express from 'express';
-import { createUserHandler, getAllCoursesHandler, getAllEventsHandler, getAllForumsHandler, getEventsByUserIdHandler, getUserHandler, registerUser } from '../controllers/user.controller'; // Importa los controladores
 
+import {registerUser, createUserHandler,createCourseHandler, createEventHandler, createFollowedEventHandler, createForumHandler, getAllCoursesHandler, getAllEventsHandler, getAllForumsHandler, getEventsByUserIdHandler, getFollowedEventsByUserIdHandler, getForumsByUserIdHandler, getUserHandler } from '../controllers/user.controller';
 const router = express.Router();
 
 // Ruta para crear un nuevo usuario
 router.post('/users', createUserHandler);
 router.post('/register', registerUser);
-
-// Ruta para obtener un usuario por su email
-router.get('/users/:email', getUserHandler); // Utiliza el parámetro email en la URL
-router.get('/forums', getAllForumsHandler); // Utiliza el parámetro email en la URL
-router.get('/events', getAllEventsHandler); // Utiliza el parámetro email en la URL
-router.get('/courses', getAllCoursesHandler); // Utiliza el parámetro email en la URL
-router.get('/eventsFollowed/:user_id', getEventsByUserIdHandler); // Utiliza el parámetro email en la URL
+router.get('/users/:email', getUserHandler); 
+router.get('/forums/:user_id', getForumsByUserIdHandler);
+router.get('/forums', getAllForumsHandler);
+router.get('/events', getAllEventsHandler); 
+router.get('/courses', getAllCoursesHandler); 
+router.get('/events/:user_id', getEventsByUserIdHandler); 
+router.get('/events/followed/:user_id', getFollowedEventsByUserIdHandler); 
+router.post('/events/follow', createFollowedEventHandler); 
+router.post('/events', createEventHandler);
+router.post('/forums', createForumHandler);
+router.post('/courses', createCourseHandler);
 //router.post('/api/auth/google', get)
+
 export default router;

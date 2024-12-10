@@ -1,5 +1,5 @@
-import React from "react";
-import { GoogleMap, LoadScript, Marker } from "@react-google-maps/api";
+import React, { useEffect, useState } from "react";
+import { GoogleMap, LoadScript, MarkerF } from "@react-google-maps/api";
 
 interface EventCardProps {
   title: string;
@@ -10,8 +10,8 @@ interface EventCardProps {
   lng: number;
   image: string;
   onClick: () => void;
-  event_id: string;
-  user_id: string;
+  event_id: string; // Ya lo pasas como prop
+  user_id: string; // Cambiado a string para ser dinámico
 }
 
 const EventCard: React.FC<EventCardProps> = ({
@@ -24,24 +24,39 @@ const EventCard: React.FC<EventCardProps> = ({
   image,
   onClick,
   event_id,
-  user_id,
 }) => {
+  // Estado para almacenar el user_id del localStorage
+  const [userId, setUserId] = useState<string | null>(null);
 
+  useEffect(() => {
+    // Obtén el user_id desde el localStorage
+    const storedUserId = localStorage.getItem("user_id");
+    if (storedUserId) {
+      setUserId(storedUserId); // Actualiza el estado con el valor del localStorage
+    }
+  }, []);
+
+  // Función para seguir el evento
   const handleFollowEvent = async () => {
+    if (!userId) {
+      alert("No estás autenticado.");
+      return;
+    }
+
     try {
-      const response = await fetch("http://localhost:3000/events/follow", {
+      const response = await fetch("http://localhost:4000/events/follow", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ user_id, event_id }),
+        body: JSON.stringify({ user_id: userId, event_id }), // Usamos el userId del estado
       });
 
       const data = await response.json();
       if (response.ok) {
         alert("Has seguido el evento con éxito.");
       } else {
-        alert(data.message || "Error al seguir el evento.");
+        alert(data.message || "Has dejado de seguir al evento.");
       }
     } catch (error) {
       console.error("Error al seguir el evento:", error);
@@ -49,6 +64,7 @@ const EventCard: React.FC<EventCardProps> = ({
     }
   };
 
+  // Definiendo las coordenadas del evento
   const latitude = parseFloat(lat as any);
   const longitude = parseFloat(lng as any);
 
@@ -71,17 +87,23 @@ const EventCard: React.FC<EventCardProps> = ({
       {/* Contenido */}
       <div className="flex flex-col justify-between p-4 md:w-1/3">
         <div>
+          {/* Aquí no es necesario mostrar event_id en la UI, lo puedes dejar invisible o quitar */}
+          <a className="invisible">{event_id}</a>
           <h3 className="font-bold text-lg">{title}</h3>
           <p className="text-sm text-gray-500">{date}</p>
           <p className="mt-2 text-gray-700">{description}</p>
-          <p className="mt-2 text-sm text-gray-600">Ubicación: {location}</p>   
-            <button
-              className="m-2 p-2 rounded-lg bg-pink-500/75 hover:bg-pink-500 text-white text-sm font-bold"
-              onClick={(e) => {
-                e.stopPropagation();
-                handleFollowEvent();
-              }}> Seguir evento </button>
-
+          <p className="mt-2 text-sm text-gray-600">Ubicación: {location}</p>
+          
+          {/* Botón de seguir el evento */}
+          <button
+            className="m-2 p-2 rounded-lg bg-pink-500/75 hover:bg-pink-500 text-white text-sm font-bold"
+            onClick={(e) => {
+              e.stopPropagation();  // Para evitar que se active el onClick del contenedor
+              handleFollowEvent();  // Llama a la función para seguir el evento
+            }}
+          >
+            Seguir evento
+          </button>
         </div>
       </div>
 
@@ -94,7 +116,7 @@ const EventCard: React.FC<EventCardProps> = ({
               zoom={12}
               mapContainerStyle={{ width: "100%", height: "200px" }}
             >
-              <Marker position={{ lat: latitude, lng: longitude }} />
+              <MarkerF position={{ lat: latitude, lng: longitude }} />
             </GoogleMap>
           </LoadScript>
         </div>
