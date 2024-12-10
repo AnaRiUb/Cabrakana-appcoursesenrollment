@@ -1,6 +1,5 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
-import { AuthProvider, useAuth } from "./context/AuthContext";
 import FooterDesktopandMobile from './components/Footer/FooterDesktopandMobile';
 import NavBar from './components/Navbar/NavBar';
 import HomePage from './pages/HomePage';
@@ -15,50 +14,47 @@ import FollowedEventsPage from './pages/FollowedEventsPage';
 import EditProfilePage from './pages/EditProfilePage';
 import ProfilePage from './pages/ProfilePage';
 import CreatedForumPage from './pages/CreatedForumPage';
-
 import './App.css';
 import './index.css';
-import Login from './components/Forms/LoginState';
-
+import LoginForm from './components/Forms/LoginForm';
 
 
 const App: React.FC = () => {
- //const { token } = useAuth();
- const [isAuthenticate, setIsAuthenticated] = useState(false); 
-  
-  const handleLogin = () => {
-    setIsAuthenticated(true);
-  };
+  const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false);
+  const [userName, setUserName] = useState<string | null>(null);
+
+
+
+  useEffect(() => {
+    const userToken = localStorage.getItem('userToken');
+    if (userToken) {
+      const parsedToken = JSON.parse(userToken);
+      setIsAuthenticated(true);
+      setUserName(parsedToken.name || 'Usuario');
+    }
+  }, []);
 
   const handleLogout = () => {
+    localStorage.removeItem('userToken');
     setIsAuthenticated(false);
-    console.log('Usuario cerró sesión');
   };
 
   return (
-    <AuthProvider>
+   
+      <Router>
 
-        <Router> 
-          <div className="app-container">
-            <Login />
-            <header>
-          <NavBar isAuthenticated={isAuthenticate} onLogout={handleLogout} />
-          {!isAuthenticate ? (
-            <button className='bg-pink-400 rounded-full m-4 p-4 font-bold shadow-md ' onClick={handleLogin}>
-              Iniciar Sesión
-            </button>
-          ) : (
-            <p className=' flex justify-center items-center text-center m-4'>
-            Bienvenido {`Nombre`} , estás autenticado.
-            </p>
-          )}
+        <div className="app-container">
+       
+          <header>
+            <NavBar
+              isAuthenticated={isAuthenticated}
+              onLogout={handleLogout}
+              setIsAuthenticated={setIsAuthenticated}
+            />
+          </header>
 
-
-      
-            </header>
-
-            <main className="main-content">
-            <Routes> 
+          <main className="main-content">
+            <Routes>
               <Route path="/" element={<HomePage />} />
               <Route path="/courses" element={<CoursesPage />} />
               <Route path="/forums" element={<ForumPage />} />
@@ -69,21 +65,44 @@ const App: React.FC = () => {
               <Route path="/created-events" element={<CreatedEventsPage />} />
               <Route path="/followed-events" element={<FollowedEventsPage />} />
               <Route path="/created-forums" element={<CreatedForumPage />} />
-              <Route path="/profile" element={<ProfilePage userAvatar={''} userName={''} userDescription={''} userAge={0} isAgeVisible={false} />} />
-              <Route path="/edit-profile" element={<EditProfilePage userAvatar={''} userGender={''} onUpdateProfile={function (newAvatar: string, newGender: string): void {
-                  throw new Error('Function not implemented.');
-                } } userDescription={''} userAge={0} isAgeVisible={false} />} />
+              <Route
+                path="/profile"
+                element={
+                  <ProfilePage
+                    userAvatar=""
+                    userName={userName || 'Usuario'}
+                    userDescription=""
+                    userAge={0}
+                    isAgeVisible={false}
+                  />
+                }
+              />
+              <Route
+                path="/edit-profile"
+                element={
+                  <EditProfilePage
+                    userAvatar=""
+                    userGender=""
+                    onUpdateProfile={function (): void {
+                      throw new Error('Function not implemented.');
+                    }}
+                    userDescription=""
+                    userAge={0}
+                    isAgeVisible={false}
+                  />
+                }
+              />
             </Routes>
-            </main>
+          </main>
 
-            <footer>
-              <FooterDesktopandMobile />
-            </footer>
+          <footer>
+            <FooterDesktopandMobile />
+          </footer>
+        </div>
 
-          
-          </div>
-        </Router> 
-    </AuthProvider>
+      </Router> 
+      
+  
   );
 };
 

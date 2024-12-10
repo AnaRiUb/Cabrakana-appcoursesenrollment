@@ -19,7 +19,7 @@ const Login = () => {
   
   
       console.log('Usuario decodificado:', decoded);
-
+      localStorage.setItem('userToken', JSON.stringify(decoded));
       // Mostrar el nombre del usuario en la consola
       if (decoded.name) {
         console.log('Nombre del usuario:', decoded.name);

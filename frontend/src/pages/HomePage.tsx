@@ -1,19 +1,36 @@
-import React from "react"; 
+import React, { useState, useEffect } from 'react';
 import { Link } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
 import ImageCarouselHome from "../components/Carousel/ImageCarouselHome";
 
 const HomePage: React.FC = () => {
-  const { token } = useAuth(); // Obtén el token del contexto (si está autenticado o no)
+  const { token } = useAuth();
   
+  type GenderType = 'Hombre' | 'Mujer' | 'Prefiero no decirlo' |  null;
+  const [gender, setGender] = useState<GenderType>(null);
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [userName, setUserName] = useState<string>("Usuario");
 
-  const userName = "Usuario"; // Esto debería venir de tu backend o contexto si está disponible
+  useEffect(() => {
+    try {
+      const userToken = localStorage.getItem('userToken');
+      if (userToken) {
+        const parsedToken = JSON.parse(userToken);
+        setIsAuthenticated(true);
+        setUserName(parsedToken.name || 'Usuario');
+        setGender(parsedToken.gender || null);
+      }
+    } catch (error) {
+      console.error('Error al leer el token del localStorage:', error);
+    }
+  }, []);
 
   return (
     <div className="bg-gray-50 min-h-screen p-6">
-   
-      {!token && (
-        <section className="flex gap-6 flex-col items-center justify-center text-center bg-gradient-to-r from-indigo-500 to-purple-600 text-white py-16 px-8 rounded-lg shadow-xl">
+      {/* Mostrar contenido basado en si el usuario está autenticado */}
+
+      {!isAuthenticated && (
+        <section className="m-8 p-4 flex gap-6 flex-col items-center justify-center text-center bg-gradient-to-r from-indigo-500 to-purple-600 text-white rounded-lg shadow-xl">
           <h1 className="text-4xl font-bold mb-4">Bienvenidos a Piwis</h1>
           <p className="text-lg mb-6 max-w-3xl mx-auto">
             Explora cursos, participa en foros y crea eventos educativos. ¡Únete a nuestra comunidad de aprendizaje!
@@ -35,32 +52,37 @@ const HomePage: React.FC = () => {
         </section>
       )}
 
-     
-      {token && (
-        <section className="flex gap-6 flex-col items-center justify-center text-center bg-gradient-to-r from-green-500 to-blue-600 text-white py-16 px-8 rounded-lg shadow-xl">
-          <h1 className="text-4xl font-bold mb-4">¡Bienvenido(a), {userName}!</h1>
-          <p className="text-lg mb-6">
-            Estás dentro de la comunidad de Piwis, disfruta de nuestros cursos, foros y eventos.
+      {isAuthenticated && (
+        <>
+          <p className="flex justify-center items-center text-center m-4">
+              Bienvenid{gender === 'Hombre' ? 'o' : gender === 'Mujer' ? 'a' : gender === 'Prefiero no decirlo' ? 'e' : 'o(a)'}{' '}
+              <Link to="/profile"> <strong className="ml-1">{userName}</strong> </Link>
+              ,estas autenticad{gender === 'Hombre' ? 'o' : gender === 'Mujer' ? 'a' : gender === 'Prefiero no decirlo' ? 'e' : 'o(a)'}{' '}.
           </p>
-        </section>
+          <section className="m-8 p-4 flex gap-6 flex-col items-center justify-center text-center bg-gradient-to-r from-green-500 to-blue-600 text-white py-16 px-8 rounded-lg shadow-xl">
+            <p className="text-4xl font-bold mb-4">
+              ¡Bienvenid{gender === 'Hombre' ? 'o' : gender === 'Mujer' ? 'a' : gender === 'Prefiero no decirlo' ? 'e' : 'o(a)'}{' '}, {userName}!
+            </p>
+            <p className="text-lg mb-6">
+              Estás dentro de la comunidad de Piwis, disfruta de nuestros cursos, foros y eventos.
+            </p>
+          </section>
+      </>
       )}
 
-
+      {/* Carousel y otras secciones */}
       <section className="my-12 p-4 lg:w-4/5 h-auto mx-auto">
-          <div className="p-4 flex justify-center">
-            <ImageCarouselHome />
-          </div>
-
-          <h2 className="text-2xl font-bold text-center my-8 text-gray-700">
-            Descubre Nuestros Cursos Destacados
-          </h2>
-        
-         
+        <div className="p-4 flex justify-center">
+          <ImageCarouselHome />
+        </div>
+        <h2 className="text-2xl font-bold text-center my-8 text-gray-700">
+          Descubre Nuestros Cursos Destacados
+        </h2>
       </section>
 
-
+      {/* Cards */}
       <section className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-    
+        {/* Cursos */}
         <div className="bg-white shadow-lg rounded-lg p-6 text-center transition-transform hover:scale-105 duration-300">
           <h3 className="text-xl font-bold mb-4 text-indigo-600">Cursos</h3>
           <p className="text-gray-600 mb-4">
