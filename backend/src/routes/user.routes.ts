@@ -1,12 +1,11 @@
 import express from 'express';
-import { createCourseHandler, createEventHandler, createFollowedEventHandler, createForumHandler, createUserHandler, getAllCoursesHandler, getAllEventsHandler, getAllForumsHandler, getEventsByUserIdHandler, getFollowedEventsByUserIdHandler, getForumsByUserIdHandler, getUserHandler } from '../controllers/user.controller'; // Importa los controladores
 
+import { createUserHandlercreateCourseHandler, createEventHandler, createFollowedEventHandler, createForumHandler, createUserHandler, getAllCoursesHandler, getAllEventsHandler, getAllForumsHandler, getEventsByUserIdHandler, getFollowedEventsByUserIdHandler, getForumsByUserIdHandler, getUserHandler } from '../controllers/user.controller';
 const router = express.Router();
 
 // Ruta para crear un nuevo usuario
 router.post('/users', createUserHandler);
-
-// Ruta para obtener un usuario por su email
+router.post('/register', registerUser);
 router.get('/users/:email', getUserHandler); 
 router.get('/forums/:user_id', getForumsByUserIdHandler);
 router.get('/forums', getAllForumsHandler);
@@ -18,4 +17,6 @@ router.post('/events/follow', createFollowedEventHandler);
 router.post('/events', createEventHandler);
 router.post('/forums', createForumHandler);
 router.post('/courses', createCourseHandler);
+//router.post('/api/auth/google', get)
+
 export default router;

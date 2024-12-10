@@ -1,5 +1,12 @@
 import express from 'express';
-import { createCourse, createEvent, createEventFollower, createForum, createUser, getAllCourses, getAllEvents, getAllForums, getEventByUserId, getEventFollowerByUserId, getForumsByUserId, getUserByEmail } from '../services/user.service';
+import { Request, Response } from 'express';
+import bcrypt from 'bcryptjs';
+import { prisma } from '../prisma/prismaClient'
+
+import { createUser, createCourse, createEvent, createEventFollower, createForum, createUser, getAllCourses, getAllEvents, getAllForums, getEventByUserId, getEventFollowerByUserId, getForumsByUserId, getUserByEmail } from '../services/user.service';
+;
+
+
 
 
 // Handler para guardar eventos seguidos 
@@ -28,6 +35,43 @@ export const createFollowedEventHandler = async (req: express.Request, res: expr
   }
 };
 
+export const registerUser = async (req: Request, res: Response) => {
+  const { name, username, email, password } = req.body;
+  try {
+    // Validación de datos básicos
+    if (!name || !username || !email || !password) {
+      return res.status(400).json({ message: 'Todos los campos son obligatorios' });
+    }
+
+    // Verifica si el email ya está registrado
+    const existingUser = await prisma.user.findUnique({
+      where: { email },
+    });
+
+    if (existingUser) {
+      return res.status(400).json({ message: 'El correo ya está registrado' });
+    }
+
+
+    // Hashea la contraseña
+    const hashedPassword = await bcrypt.hash(password, 10);
+
+    // Crea el usuario
+    const newUser = await prisma.user.create({
+      data: {
+        username: username,
+        email: email,
+        password: hashedPassword,
+        
+      },
+    });
+
+    res.status(201).json({ message: 'Usuario registrado con éxito', user: newUser });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: 'Error del servidor' });
+  }
+};
 
 export const createUserHandler = async(req: express.Request, res: express.Response) => {
   const { username, email, password } = req.body;

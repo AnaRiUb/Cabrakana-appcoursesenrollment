@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Link } from 'react-router-dom'; // Importar Link de react-router-dom
+import { Link, useNavigate } from 'react-router-dom';
 import GoogleLoginButton from '../Buttons/GoogleLoginButton';
 
 
@@ -7,12 +7,27 @@ const LoginForm: React.FC = () => {
   const [email, setEmail] = useState<string>('');
   const [password, setPassword] = useState<string>('');
   const [showPassword, setShowPassword] = useState<boolean>(false);
+  const navigate = useNavigate();
 
   const handleSubmit = (event: React.FormEvent) => {
     event.preventDefault();
-   
     console.log('Inicio de sesión:', { email, password });
+    navigate('/');
   };
+
+
+
+  const handleGoogleLogin = (response: any) => {
+    if (response.tokenId) {
+ // Aquí puedes manejar la autenticación con el tokenId o hacer la llamada a tu backend
+      // Por ejemplo, guardar el token en localStorage o en un estado global
+      console.log("Autenticado con Google: ", response);
+      
+      // Redirige a la página de inicio
+      navigate('/');
+    }
+  };
+  
 
   return (
     <section className="bg-pink-500/20 rounded-lg px-2 py-2 w-96 h-auto md:w-2/3">

@@ -6,7 +6,7 @@ require('dotenv').config();
 const client = new OAuth2Client(process.env.GOOGLE_CLIENT_ID);
 
 // Ruta para login con Google
-router.post('/google', async (req, res) => {
+router.post('/api/auth/google', async (req, res) => {
   const { token } = req.body;
 
   try {
