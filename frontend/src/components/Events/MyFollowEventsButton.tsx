@@ -1,4 +1,3 @@
-// ./src/components/Buttons/MyFollowEventsButton.tsx
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 
@@ -6,11 +5,11 @@ const MyFollowEventsButton: React.FC = () => {
   const navigate = useNavigate();
 
   const handleNavigate = () => {
-    navigate('/followed-events'); // Asegúrate de que esta ruta esté configurada en tu enrutador
+    navigate('/followed-events');
   };
 
   return (
-    <button onClick={handleNavigate} className="my-follow-events-button">
+    <button onClick={handleNavigate} className="px-2 w-20% max-w-xs rounded-lg text-pink-500 text-xs shadow-md hover:bg-white/75 bg-white font-bold">
       My Followed Events
     </button>
   );

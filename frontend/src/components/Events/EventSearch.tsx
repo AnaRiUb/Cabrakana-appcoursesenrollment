@@ -24,7 +24,7 @@ const EventSearch: React.FC<EventSearchProps> = ({ onSearch }) => {
         />
         <button
           onClick={handleSearch} // Llamar a handleSearch cuando se haga clic
-          className="absolute top-1 right-1 flex items-center rounded bg-slate-800 py-1 px-2.5 border border-transparent text-center text-m text-white transition-all shadow-sm hover:shadow focus:bg-slate-700 focus:shadow-none active:bg-slate-700 hover:bg-slate-700 active:shadow-none disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none"
+          className="absolute top-1 right-1 flex justify-center items-center rounded bg-white py-2 px-2.5 border border-transparent text-center text-xs text-pink-500 transition-all shadow-sm hover:shadow focus:bg-pink-700 focus:shadow-none active:bg-slate-300 hover:bg-slate-300 active:shadow-none disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none"
           type="button"
         >
           <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="w-4 h-4 mr-2">
