@@ -1,5 +1,5 @@
 import express from 'express';
-import { followEvent, getFollowedEvents } from '../controllers/event.Controller';
+import { followEvent } from '../controllers/event.Controller';
 
 const router = express.Router();
 
@@ -7,9 +7,9 @@ const router = express.Router();
 router.post('/:eventId/follow', followEvent);
 
 // Ruta para obtener eventos seguidos por un usuario
-router.get('/followed/:userId', getFollowedEvents);
+// router.get('/followed/:userId', getFollowedEvents);
 
-router.get("/users/:user_id/followed-events", async (req: Request, res: Response) => {
+/*router.get("/users/:user_id/followed-events", async (req: Request, res: Response) => {
     const { user_id } = req.params;
   
     try {
@@ -26,5 +26,5 @@ router.get("/users/:user_id/followed-events", async (req: Request, res: Response
   });
 
 
-
+*/
 export default router;

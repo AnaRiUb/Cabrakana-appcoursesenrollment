@@ -3,7 +3,7 @@ import { Request, Response } from 'express';
 import bcrypt from 'bcryptjs';
 import { prisma } from '../prisma/prismaClient'
 
-import { createCourse, createEvent, createEventFollower, createForum, createUser, getAllCourses, getAllEvents, getAllForums, getEventByUserId, getEventFollowerByUserId, getForumsByUserId, getUserByEmail } from '../services/user.service';
+import { createCourse, createEvent, createEventFollower, createForum, createForumComments, createUser, getAllCourses, getAllEvents, getAllForumCommentsByForumId, getAllForums, getEventByUserId, getEventFollowerByUserId, getForumsByUserId, getUserByEmail } from '../services/user.service';
 ;
 
 
@@ -198,7 +198,49 @@ export const getUserHandler = async  (req: express.Request, res: express.Respons
   }
 };
 
-export const getAllForumsHandler = async  (req: express.Request, res: express.Response)  => {
+export const getAllForumsCommentsHandler =   async  (req: express.Request, res: express.Response)  => {
+
+  const { forum_id } = req.params;
+  try {
+      const forums = await getAllForumCommentsByForumId(forum_id);
+      
+      if (!forums || forums.length === 0) {
+        return res.status(404).json({ error: 'No comments found' });
+      }
+  
+      res.json(forums);
+    } catch (error) {
+      res.status(500).json({ error: 'Error fetching comments forums' });
+    }
+};
+
+export const createForumsCommentsHandler =   async  (req: express.Request, res: express.Response)  => {
+    const { forum_id,  user_id, comment_text } = req.body;
+  
+    try {
+      // Validar los datos antes de continuar (opcional, pero recomendado)
+      if (!forum_id || !user_id || !comment_text) {
+        return res.status(400).json({ error: 'Faltan campos obligatorios' });
+      }
+  
+      // Crear un evento utilizando la función correspondiente
+      const newEvent = await createForumComments(
+        forum_id, // Si no se genera automáticamente en la base de datos
+        user_id,
+        comment_text,// Asegúrate de convertir la fecha a un formato válido
+        new Date(),
+        new Date()// Agregar la fecha de creación
+      );
+  
+      // Responder con el evento creado
+      res.status(201).json(newEvent);
+    } catch (error) {
+      console.error('Error creando evento:', error);
+      res.status(500).json({ error: 'Error creando el evento' });
+    }
+  };
+
+ export const getAllForumsHandler = async  (req: express.Request, res: express.Response)  => {
     try {
         const forums = await getAllForums();
         
