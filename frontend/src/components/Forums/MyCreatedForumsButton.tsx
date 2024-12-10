@@ -23,17 +23,40 @@ const MyCreatedForumsButton: React.FC<MyCreatedForumsButtonProps> = ({ onCreate 
     setFormValues((prev) => ({ ...prev, [name]: value }));
   };
 
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
     const newForum = {
       id: Date.now().toString(), // ID temporal, podría generarse desde el backend
       title: formValues.title,
       description: formValues.description,
+      created_by: "ad235556-0eae-47a5-8d84-e3046e703eb0", // Reemplaza con el ID del creador si es necesario
+      created_at: new Date().toISOString(),
     };
 
-    onCreate(newForum); // Llama al callback con los datos del foro
-    handleCloseModal();
+    try {
+      // Realiza la petición POST usando fetch
+      const response = await fetch("http://localhost:4000/forums", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(newForum),
+      });
+
+      if (!response.ok) {
+        throw new Error("Error al crear el foro");
+      }
+
+      const createdForum = await response.json();
+      console.log("Foro creado con éxito:", createdForum);
+
+      onCreate(newForum); // Llama al callback con los datos del foro
+      handleCloseModal();
+    } catch (error) {
+      console.error("Error al crear el foro:", error);
+      alert("Hubo un error al crear el foro.");
+    }
   };
 
   return (

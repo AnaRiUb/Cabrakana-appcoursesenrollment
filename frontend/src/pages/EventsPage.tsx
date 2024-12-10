@@ -6,6 +6,7 @@ import EventSearch from "../components/Events/EventSearch";
 
 const EventPage: React.FC = () => {
   const [events, setEvents] = useState<Array<any>>([]); // Estado para almacenar eventos
+  const [filteredEvents, setFilteredEvents] = useState<Array<any>>([]); // Estado para almacenar eventos filtrados
   const [loading, setLoading] = useState<boolean>(true); // Estado de carga
   const [error, setError] = useState<string | null>(null); // Estado de error
 
@@ -19,6 +20,7 @@ const EventPage: React.FC = () => {
         }
         const data = await response.json();
         setEvents(data); // Actualizar el estado con los datos del API
+        setFilteredEvents(data); // Inicializar los eventos filtrados con todos los eventos
       } catch (err: any) {
         setError(err.message);
       } finally {
@@ -29,6 +31,19 @@ const EventPage: React.FC = () => {
     fetchEvents();
   }, []); // Ejecutar una vez al montar el componente
 
+  // Función para manejar la búsqueda
+  const handleSearch = (searchTerm: string) => {
+    if (searchTerm.trim() === "") {
+      setFilteredEvents(events); // Si el término de búsqueda está vacío, restaurar todos los eventos
+    } else {
+      const filtered = events.filter((event) =>
+        event.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        event.description.toLowerCase().includes(searchTerm.toLowerCase())
+      );
+      setFilteredEvents(filtered); // Filtrar eventos según el término de búsqueda
+    }
+  };
+
   const handleEventClick = (eventId: string) => {
     console.log(`Event card clicked! ID: ${eventId}`);
   };
@@ -36,11 +51,7 @@ const EventPage: React.FC = () => {
   return (
     <div>
       <div className="p-4 m-2 flex justify-center gap-4">
-        <EventSearch
-          onSearch={(searchTerm: string) => {
-            console.log(`Search: ${searchTerm}`);
-          }}
-        />
+        <EventSearch onSearch={handleSearch} />
 
         <Link to="/created-events">
           <button className="bg-white rounded-lg p-2 font-bold shadow-md text-pink-500">
@@ -56,10 +67,10 @@ const EventPage: React.FC = () => {
           <p>Cargando eventos...</p>
         ) : error ? (
           <p>Error: {error}</p>
-        ) : events.length === 0 ? (
+        ) : filteredEvents.length === 0 ? (
           <p>No hay eventos disponibles</p>
         ) : (
-          events.map((event) => (
+          filteredEvents.map((event) => (
             <EventCard
               key={event.event_id}
               title={event.title}
@@ -71,7 +82,8 @@ const EventPage: React.FC = () => {
               lng={event.longitude}
               onClick={() => handleEventClick(event.event_id)} 
               event_id={event.event_id} 
-              user_id={event.created_by}/>
+              user_id={event.created_by}
+            />
           ))
         )}
       </div>

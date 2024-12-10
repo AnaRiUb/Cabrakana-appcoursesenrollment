@@ -57,6 +57,43 @@ export const createCourse = async (
 
   return newCourse;
 };
+export const createEventFollower = async (
+  follower_id: string,
+  event_id: string,
+  user_id: string,
+  followed_at: Date,
+) => {
+  // Verificar si ya existe una relación entre user_id y event_id
+  const existingEventFollower = await prisma.eventFollower.findMany({
+    where: {
+      event_id: event_id,
+      user_id: user_id,
+    },
+  });
+
+  if (existingEventFollower.length > 0) {
+    await prisma.eventFollower.deleteMany({
+      where: {
+        user_id: user_id,
+        event_id: event_id
+      }
+    });
+
+    throw new Error("Acabas de eliminar este evento.");
+  }
+
+  // Si no existe, se crea un nuevo registro
+  const newEventFollower = await prisma.eventFollower.create({
+    data: {
+      follower_id,
+      event_id,
+      user_id,
+      followed_at,
+    },
+  });
+
+  return newEventFollower;
+};
 
 
 export const createForum = async (
@@ -124,16 +161,31 @@ export const getAllForums = async () => {
   return events;
   };
 
-  export const getEventFollowerByUserId = async  (user_id: string) => {
-    const eventsFollowed = await prisma.eventFollower.findMany({
-        where: {
-            user_id,
-        },
-      });
+  
+  export const getEventByUserId = async (created_by: string) => {
+    const events = await prisma.event.findMany({
+      where: {
+        created_by,
+      },
     
-      return eventsFollowed;
+    });
+  
+    return events;
   };
 
+
+  export const getEventFollowerByUserId = async (user_id: string) => {
+    const eventsFollowed = await prisma.eventFollower.findMany({
+      where: {
+        user_id,
+      },
+      include: {
+        event: true, // Incluir los datos del evento relacionado
+      },
+    });
+  
+    return eventsFollowed;
+  };
   export const getAllCourses = async () => {
     const courses = await prisma.course.findMany();
   return courses;

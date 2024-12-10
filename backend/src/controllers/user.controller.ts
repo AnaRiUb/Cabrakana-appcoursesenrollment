@@ -1,5 +1,32 @@
 import express from 'express';
-import { createCourse, createEvent, createForum, createUser, getAllCourses, getAllEvents, getAllForums, getEventFollowerByUserId, getUserByEmail } from '../services/user.service';
+import { createCourse, createEvent, createEventFollower, createForum, createUser, getAllCourses, getAllEvents, getAllForums, getEventByUserId, getEventFollowerByUserId, getUserByEmail } from '../services/user.service';
+
+
+// Handler para guardar eventos seguidos 
+export const createFollowedEventHandler = async (req: express.Request, res: express.Response) => {
+  const { user_id, event_id } = req.body;
+
+  try {
+    // Validar los datos antes de continuar
+    if (!user_id || !event_id ) {
+      return res.status(400).json({ error: 'Faltan campos obligatorios' });
+    }
+
+    // Crear un foro utilizando la función correspondiente
+    const newEventFollower = await createEventFollower(
+     generateUUID(), // Si no se genera automáticamente en la base de datos
+     event_id,
+     user_id,
+     new Date(), // Agregar la fecha de creación
+    );
+
+    // Responder con el foro creado
+    res.status(201).json(newEventFollower);
+  } catch (error) {
+    console.error('Error creando el evento a seguir:', error);
+    res.status(500).json({ error: 'Error creando el evento a seguir'});
+  }
+};
 
 
 export const createUserHandler = async(req: express.Request, res: express.Response) => {
@@ -156,6 +183,21 @@ export const getAllEventsHandler = async  (req: express.Request, res: express.Re
 
   
 export const getEventsByUserIdHandler = async  (req: express.Request, res: express.Response)  => {
+
+  const { user_id } = req.params;
+  try {
+      const events = await getEventByUserId(user_id);
+      
+     if (!events || events.length === 0) {
+        return res.status(404).json({ error: 'No events found' });
+      }
+      res.json(events);
+    } catch (error) {
+      res.status(500).json({ error: 'Error fetching events' });
+    }
+};
+
+export const getFollowedEventsByUserIdHandler = async  (req: express.Request, res: express.Response)  => {
 
     const { user_id } = req.params;
     try {

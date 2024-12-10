@@ -1,5 +1,5 @@
 import express from 'express';
-import { createCourseHandler, createEventHandler, createForumHandler, createUserHandler, getAllCoursesHandler, getAllEventsHandler, getAllForumsHandler, getEventsByUserIdHandler, getUserHandler } from '../controllers/user.controller'; // Importa los controladores
+import { createCourseHandler, createEventHandler, createFollowedEventHandler, createForumHandler, createUserHandler, getAllCoursesHandler, getAllEventsHandler, getAllForumsHandler, getEventsByUserIdHandler, getFollowedEventsByUserIdHandler, getUserHandler } from '../controllers/user.controller'; // Importa los controladores
 
 const router = express.Router();
 
@@ -11,7 +11,9 @@ router.get('/users/:email', getUserHandler);
 router.get('/forums', getAllForumsHandler);
 router.get('/events', getAllEventsHandler); 
 router.get('/courses', getAllCoursesHandler); 
-router.get('/eventsFollowed/:user_id', getEventsByUserIdHandler); 
+router.get('/events/:user_id', getEventsByUserIdHandler); 
+router.get('/events/followed/:user_id', getFollowedEventsByUserIdHandler); 
+router.post('/events/follow', createFollowedEventHandler); 
 router.post('/events', createEventHandler);
 router.post('/forums', createForumHandler);
 router.post('/courses', createCourseHandler);
