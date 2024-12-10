@@ -172,6 +172,17 @@ export const getAllForums = async () => {
   
     return events;
   };
+  
+  export const getForumsByUserId = async (created_by: string) => {
+    const forums = await prisma.forum.findMany({
+      where: {
+        created_by,
+      },
+    
+    });
+  
+    return forums;
+  };
 
 
   export const getEventFollowerByUserId = async (user_id: string) => {

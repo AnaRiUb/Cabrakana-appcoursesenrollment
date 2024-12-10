@@ -1,5 +1,5 @@
 import express from 'express';
-import { createCourse, createEvent, createEventFollower, createForum, createUser, getAllCourses, getAllEvents, getAllForums, getEventByUserId, getEventFollowerByUserId, getUserByEmail } from '../services/user.service';
+import { createCourse, createEvent, createEventFollower, createForum, createUser, getAllCourses, getAllEvents, getAllForums, getEventByUserId, getEventFollowerByUserId, getForumsByUserId, getUserByEmail } from '../services/user.service';
 
 
 // Handler para guardar eventos seguidos 
@@ -194,6 +194,22 @@ export const getEventsByUserIdHandler = async  (req: express.Request, res: expre
       res.json(events);
     } catch (error) {
       res.status(500).json({ error: 'Error fetching events' });
+    }
+};
+
+
+export const getForumsByUserIdHandler = async  (req: express.Request, res: express.Response)  => {
+
+  const { user_id } = req.params;
+  try {
+      const forums = await getForumsByUserId(user_id);
+      
+     if (!forums || forums.length === 0) {
+        return res.status(404).json({ error: 'No forums found' });
+      }
+      res.json(forums);
+    } catch (error) {
+      res.status(500).json({ error: 'Error fetching forums' });
     }
 };
 

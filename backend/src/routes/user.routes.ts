@@ -1,5 +1,5 @@
 import express from 'express';
-import { createCourseHandler, createEventHandler, createFollowedEventHandler, createForumHandler, createUserHandler, getAllCoursesHandler, getAllEventsHandler, getAllForumsHandler, getEventsByUserIdHandler, getFollowedEventsByUserIdHandler, getUserHandler } from '../controllers/user.controller'; // Importa los controladores
+import { createCourseHandler, createEventHandler, createFollowedEventHandler, createForumHandler, createUserHandler, getAllCoursesHandler, getAllEventsHandler, getAllForumsHandler, getEventsByUserIdHandler, getFollowedEventsByUserIdHandler, getForumsByUserIdHandler, getUserHandler } from '../controllers/user.controller'; // Importa los controladores
 
 const router = express.Router();
 
@@ -8,6 +8,7 @@ router.post('/users', createUserHandler);
 
 // Ruta para obtener un usuario por su email
 router.get('/users/:email', getUserHandler); 
+router.get('/forums/:user_id', getForumsByUserIdHandler);
 router.get('/forums', getAllForumsHandler);
 router.get('/events', getAllEventsHandler); 
 router.get('/courses', getAllCoursesHandler); 
