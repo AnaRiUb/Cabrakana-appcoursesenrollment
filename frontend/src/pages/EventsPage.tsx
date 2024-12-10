@@ -50,18 +50,22 @@ const EventPage: React.FC = () => {
 
   return (
     <div>
-      <div className="p-4 m-2 flex justify-center gap-4">
+      <div className="flex justify-center gap-4">
+
         <EventSearch onSearch={handleSearch} />
 
         <Link to="/created-events">
-          <button className="bg-white rounded-lg p-2 font-bold shadow-md text-pink-500">
+          <button className="bg-white hover:bg-white/75 rounded-lg p-2 py-4 w-20% max-w-sm min-w-[20px]  text-xs font-bold shadow-md text-pink-500">
             Mis eventos
           </button>
         </Link>
+
+        <MyFollowEventsButton />
+
       </div>
 
       <div className="p-4 m-2 flex flex-col justify-center gap-4">
-        <MyFollowEventsButton />
+    
 
         {loading ? (
           <p>Cargando eventos...</p>
@@ -76,7 +80,11 @@ const EventPage: React.FC = () => {
             title={event.title}
             description={event.description}
             date={event.event_date}
-            image={event.event_image_url}
+            image={
+              event.event_image_url && event.event_image_url.trim() !== ""
+                ? event.event_image_url
+                : "https://res.cloudinary.com/dyg2tq33j/image/upload/v1733848850/rst60fffxxulup7su3o1.png"
+            }
             location={event.location}
             lat={event.latitude}
             lng={event.longitude}

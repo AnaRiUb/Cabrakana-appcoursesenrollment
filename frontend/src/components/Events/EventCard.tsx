@@ -10,8 +10,8 @@ interface EventCardProps {
   lng: number;
   image: string;
   onClick: () => void;
-  event_id: string; // Ya lo pasas como prop
-  user_id: string; // Cambiado a string para ser dinámico
+  event_id: string;
+  user_id: string; 
 }
 
 const EventCard: React.FC<EventCardProps> = ({
@@ -25,18 +25,26 @@ const EventCard: React.FC<EventCardProps> = ({
   onClick,
   event_id,
 }) => {
-  // Estado para almacenar el user_id del localStorage
   const [userId, setUserId] = useState<string | null>(null);
+  const [isFollowing, setIsFollowing] = useState(false); // Estado de seguimiento
 
+  // Obtener el `user_id` del localStorage
   useEffect(() => {
-    // Obtén el user_id desde el localStorage
     const storedUserId = localStorage.getItem("user_id");
     if (storedUserId) {
-      setUserId(storedUserId); // Actualiza el estado con el valor del localStorage
+      setUserId(storedUserId);
     }
   }, []);
 
-  // Función para seguir el evento
+  // Leer el estado de seguimiento desde el localStorage al montar el componente
+  useEffect(() => {
+    const followStatus = localStorage.getItem(`follow_event_${event_id}`);
+    if (followStatus === 'true') {
+      setIsFollowing(true);
+    }
+  }, [event_id]);
+
+  // Función para seguir/dejar de seguir el evento
   const handleFollowEvent = async () => {
     if (!userId) {
       alert("No estás autenticado.");
@@ -44,35 +52,45 @@ const EventCard: React.FC<EventCardProps> = ({
     }
 
     try {
-      const response = await fetch("http://localhost:4000/events/follow", {
-        method: "POST",
+    
+
+      const response = await fetch(
+      "http://localhost:4000/events/follow", {
+        method: isFollowing ? "DELETE" : "POST", // DELETE para dejar de seguir, POST para seguir
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ user_id: userId, event_id }), // Usamos el userId del estado
+        body: JSON.stringify({ user_id: userId, event_id }),
       });
 
-      const data = await response.json();
       if (response.ok) {
-        alert("Has seguido el evento con éxito.");
+        const newState = !isFollowing;
+        setIsFollowing(newState); // Alterna el estado
+        
+        // Guardar el estado en el localStorage
+        localStorage.setItem(`follow_event_${event_id}`, newState ? 'true' : 'false');
+
+        alert(
+          newState
+            ? "Has seguido el evento con éxito."
+            : "Has dejado de seguir el evento."
+        );
       } else {
-        alert(data.message || "Has dejado de seguir al evento.");
+        const data = await response.json();
+        alert(data.message || "Ocurrió un error.");
       }
     } catch (error) {
-      console.error("Error al seguir el evento:", error);
-      alert("Ocurrió un error al intentar seguir el evento.");
+      console.error("Error al gestionar el seguimiento del evento:", error);
+      alert("Ocurrió un error al intentar gestionar el seguimiento.");
     }
   };
 
-  // Definiendo las coordenadas del evento
-  const latitude = parseFloat(lat as any);
-  const longitude = parseFloat(lng as any);
-
-  const googleMapsUrl = `https://www.google.com/maps?q=${latitude},${longitude}&z=15`;
+  
+  const googleMapsUrl = `https://www.google.com/maps?q=${lat},${lng}&z=15`;
 
   return (
     <div
-      className="flex flex-col md:flex-row bg-white/75 border rounded-lg shadow-md overflow-hidden transition-transform duration-300 hover:scale-105"
+      className="max-w-6xl mx-auto mt-4 gap-2 p-4 flex flex-col md:flex-row bg-white/75 border rounded-lg shadow-md overflow-hidden transition-transform duration-300 hover:scale-105"
       onClick={onClick}
     >
       {/* Imagen */}
@@ -86,37 +104,33 @@ const EventCard: React.FC<EventCardProps> = ({
 
       {/* Contenido */}
       <div className="flex flex-col justify-between p-4 md:w-1/3">
-        <div>
-          {/* Aquí no es necesario mostrar event_id en la UI, lo puedes dejar invisible o quitar */}
-          <a className="invisible">{event_id}</a>
-          <h3 className="font-bold text-lg">{title}</h3>
-          <p className="text-sm text-gray-500">{date}</p>
-          <p className="mt-2 text-gray-700">{description}</p>
-          <p className="mt-2 text-sm text-gray-600">Ubicación: {location}</p>
-          
-          {/* Botón de seguir el evento */}
-          <button
-            className="m-2 p-2 rounded-lg bg-pink-500/75 hover:bg-pink-500 text-white text-sm font-bold"
-            onClick={(e) => {
-              e.stopPropagation();  // Para evitar que se active el onClick del contenedor
-              handleFollowEvent();  // Llama a la función para seguir el evento
-            }}
-          >
-            Seguir evento
-          </button>
-        </div>
+        <h3 className="font-bold text-lg">{title}</h3>
+        <p className="text-sm text-gray-500">{date}</p>
+        <p className="mt-2 text-gray-700">{description}</p>
+        <p className="mt-2 text-sm text-gray-600">Ubicación: {location}</p>
+
+        {/* Botón de seguir el evento */}
+        <button
+          className="m-2 p-2 rounded-lg bg-pink-500/75 hover:bg-pink-500 text-white text-sm font-bold"
+          onClick={(e) => {
+            e.stopPropagation(); // Evitar activar el onClick del contenedor
+            handleFollowEvent(); // Gestionar seguimiento del evento
+          }}
+        >
+          {isFollowing ? "Dejar de seguir el evento" : "Seguir evento"}
+        </button>
       </div>
 
-      {/* Mapa y botón */}
+      {/* Mapa */}
       <div className="flex flex-col items-center p-2 w-full md:w-1/3">
         <div className="w-full">
-          <LoadScript googleMapsApiKey="AIzaSyA6Rat4XB1qcltaTLlea57pEQA8whd-hUU">
+          <LoadScript googleMapsApiKey={process.env.REACT_APP_GOOGLE_MAPS_API_KEY || ''}>
             <GoogleMap
-              center={{ lat: latitude, lng: longitude }}
+              center={{ lat, lng }}
               zoom={12}
               mapContainerStyle={{ width: "100%", height: "200px" }}
             >
-              <MarkerF position={{ lat: latitude, lng: longitude }} />
+              <MarkerF position={{ lat, lng }} />
             </GoogleMap>
           </LoadScript>
         </div>

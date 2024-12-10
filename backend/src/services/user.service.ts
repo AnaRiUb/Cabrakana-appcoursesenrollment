@@ -153,7 +153,6 @@ export const getUserByEmail = async (email: string) => {
   return user;
 };
 
-
   export const createForumComments = async ( forum_id: string, user_id: string, comment_text: string, comment_date: Date, comment_time: Date,
 
   ) => {
@@ -184,7 +183,24 @@ export const getAllForumCommentsByForumId = async (forum_id: string) => {
 
 
 export const getAllForums = async () => {
-    const forums = await prisma.forum.findMany();
+    const forums = await prisma.forum.findMany({
+    
+      include: {
+        creator: true, // Incluir los datos del evento relacionado
+      },
+    });
+
+
+  
+
+
+
+
+
+
+
+
+
   return forums;
   };
   export const getAllEvents = async () => {

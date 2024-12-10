@@ -1,8 +1,9 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
+import { LoadScript, Autocomplete } from "@react-google-maps/api";
 
 interface MyCreatedEventButtonProps {
   onCreate: (newEvent: Event) => void;
-  user_id: string; // Añadimos el user_id para pasar a la API
+  user_id: string;
 }
 
 interface Event {
@@ -10,11 +11,12 @@ interface Event {
   title: string;
   description: string;
   date: string;
-  image: string;
+  event_image_url: string;
   location: string;
   lat: number;
   lng: number;
 }
+
 const MyCreatedEventButton: React.FC<MyCreatedEventButtonProps> = ({ onCreate, user_id }) => {
   const [showForm, setShowForm] = useState(false);
   const [loading, setLoading] = useState(false);
@@ -29,7 +31,7 @@ const MyCreatedEventButton: React.FC<MyCreatedEventButtonProps> = ({ onCreate, u
     location: "",
   });
 
-  const [followedEvents, setFollowedEvents] = useState<any[]>([]);
+  const [autocomplete, setAutocomplete] = useState<google.maps.places.Autocomplete | null>(null);
 
   const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
@@ -39,11 +41,11 @@ const MyCreatedEventButton: React.FC<MyCreatedEventButtonProps> = ({ onCreate, u
   };
 
   const uploadImageToCloudinary = async (imageFile: File) => {
-    setLoading(true); // Deshabilitar el botón al iniciar la carga de la imagen
+    setLoading(true);
     const formData = new FormData();
     formData.append("file", imageFile);
-    formData.append("upload_preset", "apptofindevents"); 
-    formData.append("cloud_name", "dyg2tq33j"); 
+    formData.append("upload_preset", "apptofindevents");
+    formData.append("cloud_name", "dyg2tq33j");
 
     try {
       const response = await fetch("https://api.cloudinary.com/v1_1/dyg2tq33j/image/upload", {
@@ -53,12 +55,25 @@ const MyCreatedEventButton: React.FC<MyCreatedEventButtonProps> = ({ onCreate, u
 
       const data = await response.json();
       const imageUrl = data.secure_url;
-      setImageURL(imageUrl); 
+      setImageURL(imageUrl);
       console.log("Imagen subida exitosamente:", imageUrl);
     } catch (err) {
       console.log(err);
     } finally {
-      setLoading(false); // Habilitar el botón después de la carga
+      setLoading(false);
+    }
+  };
+
+  const onLoad = (autoC: google.maps.places.Autocomplete) => {
+    setAutocomplete(autoC);
+  };
+
+  const onPlaceChanged = () => {
+    if (autocomplete !== null) {
+      const place = autocomplete.getPlace();
+      if (place.formatted_address) {
+        setNewEvent({ ...newEvent, location: place.formatted_address });
+      }
     }
   };
 
@@ -69,9 +84,7 @@ const MyCreatedEventButton: React.FC<MyCreatedEventButtonProps> = ({ onCreate, u
 
     try {
       const response = await fetch(
-        `https://maps.googleapis.com/maps/api/geocode/json?address=${encodeURIComponent(
-          newEvent.location
-        )}&key=AIzaSyA6Rat4XB1qcltaTLlea57pEQA8whd-hUU`
+        `https://maps.googleapis.com/maps/api/geocode/json?address=${encodeURIComponent(newEvent.location)}&key=${process.env.REACT_APP_GOOGLE_MAPS_API_KEY}`
       );
 
       if (!response.ok) {
@@ -85,15 +98,17 @@ const MyCreatedEventButton: React.FC<MyCreatedEventButtonProps> = ({ onCreate, u
 
       const { lat, lng } = data.results[0].geometry.location;
 
+      const finalImageURL = imageURL || 'svg/EventPageDefault.png';
+
       const newEventData = {
         title: newEvent.title,
         description: newEvent.description,
         event_date: newEvent.date,
-        event_image_url: imageURL,
+        event_image_url: finalImageURL,
         location: newEvent.location,
         latitude: lat,
         longitude: lng,
-        created_by: user_id, // Utiliza el user_id proporcionado
+        created_by: user_id,
       };
 
       const createEventResponse = await fetch("http://localhost:4000/events", {
@@ -109,7 +124,7 @@ const MyCreatedEventButton: React.FC<MyCreatedEventButtonProps> = ({ onCreate, u
       }
 
       const createdEvent = await createEventResponse.json();
-      onCreate(createdEvent); // Llamar a onCreate para actualizar el estado en el componente padre
+      onCreate(createdEvent);
 
       setShowForm(false);
       setNewEvent({
@@ -128,27 +143,10 @@ const MyCreatedEventButton: React.FC<MyCreatedEventButtonProps> = ({ onCreate, u
 
   return (
     <div>
-      {/* Mostrar los eventos seguidos */}
-      <div>
-        <h3>Tus eventos seguidos:</h3>
-        <ul>
-          {followedEvents.length > 0 ? (
-            followedEvents.map((event) => (
-              <li key={event.event_id}>
-                {event.event.title} - {event.event.event_date}
-              </li>
-            ))
-          ) : (
-            <p>No has seguido ningún evento aún.</p>
-          )}
-        </ul>
-      </div>
-
-      {/* Botón para mostrar el formulario de creación */}
       <button
-        className="bg-blue-500 text-white px-4 py-2 rounded"
+        className="bg-pink-500 text-white px-4 py-2 rounded"
         onClick={() => setShowForm(true)}
-        disabled={loading} // Deshabilita el botón mientras se está cargando la imagen
+        disabled={loading}
       >
         Crear nuevo evento
       </button>
@@ -157,6 +155,7 @@ const MyCreatedEventButton: React.FC<MyCreatedEventButtonProps> = ({ onCreate, u
         <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50">
           <div className="bg-white rounded-lg p-6 w-96">
             <h2 className="text-xl font-bold mb-4">Crear Nuevo Evento</h2>
+
             <form onSubmit={handleSubmit}>
               <input
                 type="text"
@@ -177,13 +176,23 @@ const MyCreatedEventButton: React.FC<MyCreatedEventButtonProps> = ({ onCreate, u
                 value={newEvent.date}
                 onChange={(e) => setNewEvent({ ...newEvent, date: e.target.value })}
               />
-              <input
-                type="text"
-                placeholder="Ubicación (dirección)"
-                className="block p-2 w-full mb-2 border rounded"
-                value={newEvent.location}
-                onChange={(e) => setNewEvent({ ...newEvent, location: e.target.value })}
-              />
+
+              <LoadScript 
+                googleMapsApiKey={process.env.REACT_APP_GOOGLE_MAPS_API_KEY || ''} 
+                libraries={["places"]}
+              >
+
+               <Autocomplete onLoad={onLoad} onPlaceChanged={onPlaceChanged}>
+                <input
+                  type="text"
+                  placeholder="Ubicación (dirección)"
+                  className="block p-2 w-full mb-2 border rounded"
+                  value={newEvent.location}
+                  onChange={(e) => setNewEvent({ ...newEvent, location: e.target.value })}
+                />
+              </Autocomplete>
+              </LoadScript>
+
               <input
                 type="file"
                 accept="image/*"
@@ -194,15 +203,15 @@ const MyCreatedEventButton: React.FC<MyCreatedEventButtonProps> = ({ onCreate, u
               <div className="flex justify-between mt-4">
                 <button
                   type="button"
-                  className="bg-red-500 text-white px-4 py-2 rounded"
+                  className="bg-gray-500 hover:bg-gray-400 text-white px-4 py-2 rounded"
                   onClick={() => setShowForm(false)}
                 >
                   Cancelar
                 </button>
                 <button
                   type="submit"
-                  className="bg-green-500 text-white px-4 py-2 rounded"
-                  disabled={loading} // Deshabilita el botón mientras se está cargando la imagen
+                  className="bg-pink-500 hover:bg-pink-600 text-white px-4 py-2 rounded"
+                  disabled={loading}
                 >
                   {loading ? "Creando..." : "Crear Evento"}
                 </button>
@@ -214,4 +223,5 @@ const MyCreatedEventButton: React.FC<MyCreatedEventButtonProps> = ({ onCreate, u
     </div>
   );
 };
+
 export default MyCreatedEventButton;

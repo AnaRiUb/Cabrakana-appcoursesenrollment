@@ -5,6 +5,9 @@ import ForumCard from '../components/Forums/ForumCard';
 
 interface Forum {
   forum_id: string;
+  creator: {
+    username: string;
+  } ;
   title: string;
   description: string;
   created_by: string;
@@ -79,7 +82,7 @@ const Forums: React.FC = () => {
               key={forum.forum_id}
               title={forum.title}
               description={forum.description}
-              author={forum.created_by}
+              author={forum.creator.username}
               createdAt={new Date(forum.created_at).toLocaleDateString()}
               image={''}
               onClick={() => handleForumClick(forum.forum_id)} // Llamamos a la función aquí
