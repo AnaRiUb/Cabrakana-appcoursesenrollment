@@ -5,6 +5,7 @@ import NavBar from './components/Navbar/NavBar';
 import HomePage from './pages/HomePage';
 import CoursesPage from './pages/CoursesPage';
 import ForumPage from './pages/ForumPage';
+import ForumCommentsPage from './pages/ForumCommentsPage';
 import EventsPage from './pages/EventsPage';
 import LoginPage from './pages/LoginPage';
 import SignupPage from './pages/SignUpPage';
@@ -58,6 +59,7 @@ const App: React.FC = () => {
               <Route path="/" element={<HomePage />} />
               <Route path="/courses" element={<CoursesPage />} />
               <Route path="/forums" element={<ForumPage />} />
+              <Route path="/forum-comments" element={<ForumCommentsPage />} />
               <Route path="/events" element={<EventsPage />} />
               <Route path="/login" element={<LoginPage />} />
               <Route path="/signup" element={<SignupPage />} />

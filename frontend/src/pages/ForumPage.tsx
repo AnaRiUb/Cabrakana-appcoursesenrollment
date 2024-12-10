@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import ForumSearch from '../components/Forums/ForumSearch';
 import ForumCard from '../components/Forums/ForumCard';
 
@@ -13,8 +13,10 @@ interface Forum {
 
 const Forums: React.FC = () => {
   const [forums, setForums] = useState<Forum[]>([]);
-  const [filteredForums, setFilteredForums] = useState<Forum[]>([]); // Estado para los foros filtrados
+  const [filteredForums, setFilteredForums] = useState<Forum[]>([]); 
   const [loading, setLoading] = useState<boolean>(true);
+  
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchForums = async () => {
@@ -25,7 +27,7 @@ const Forums: React.FC = () => {
         }
         const data = await response.json();
         setForums(data);
-        setFilteredForums(data); // Al principio, los foros filtrados son iguales a todos los foros
+        setFilteredForums(data); 
       } catch (error) {
         console.error('Error al obtener los foros:', error);
       } finally {
@@ -38,14 +40,21 @@ const Forums: React.FC = () => {
 
   const handleSearch = (searchTerm: string) => {
     if (searchTerm.trim() === '') {
-      setFilteredForums(forums); // Si no hay búsqueda, mostramos todos los foros
+      setFilteredForums(forums);
     } else {
       const filtered = forums.filter((forum) =>
         forum.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
         forum.description.toLowerCase().includes(searchTerm.toLowerCase())
       );
-      setFilteredForums(filtered); // Filtramos los foros según el término de búsqueda
+      setFilteredForums(filtered);
     }
+  };
+
+  const handleForumClick = (forum_id: string) => {
+    // Guardar el forum_id en el localStorage
+    localStorage.setItem('forum_id', forum_id);
+    // Redirigir a la página de comentarios
+    navigate('/forum-comments');
   };
 
   return (
@@ -72,7 +81,8 @@ const Forums: React.FC = () => {
               description={forum.description}
               author={forum.created_by}
               createdAt={new Date(forum.created_at).toLocaleDateString()}
-              image={''} // Agrega la lógica para manejar imágenes si es necesario
+              image={''}
+              onClick={() => handleForumClick(forum.forum_id)} // Llamamos a la función aquí
             />
           ))
         ) : (

@@ -152,6 +152,37 @@ export const getUserByEmail = async (email: string) => {
 
   return user;
 };
+
+
+  export const createForumComments = async ( forum_id: string, user_id: string, comment_text: string, comment_date: Date, comment_time: Date,
+
+  ) => {
+    const newForumComment = await prisma.forumComment.create({
+      data: {
+        forum_id,
+        user_id,
+        comment_text,
+        comment_date,
+        comment_time
+      },
+    });
+  
+    return newForumComment;
+  };
+export const getAllForumCommentsByForumId = async (forum_id: string) => {
+  const forumCommentsFollowed = await prisma.forumComment.findMany({
+    where: {
+      forum_id,
+    },
+    include: {
+      user: true, 
+    },
+  });
+
+  return forumCommentsFollowed;
+};
+
+
 export const getAllForums = async () => {
     const forums = await prisma.forum.findMany();
   return forums;

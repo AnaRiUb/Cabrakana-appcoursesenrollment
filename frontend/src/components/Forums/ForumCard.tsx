@@ -6,11 +6,12 @@ interface ForumCardProps {
   author: string;
   createdAt: string;
   image: string; // Nueva propiedad para la imagen
+  onClick?: () => void;
 }
 
-const ForumCard: React.FC<ForumCardProps> = ({ title, description, author, createdAt, image }) => {
+const ForumCard: React.FC<ForumCardProps> = ({ title, description, author, createdAt, image, onClick }) => {
   return (
-    <div className="transform hover:scale-105 transition duration-300 forum-card  bg-white/75 border rounded p-4 shadow-md flex">
+    <div className="transform hover:scale-105 transition duration-300 forum-card  bg-white/75 border rounded p-4 shadow-md flex"  onClick={onClick}>
       {/* Sección de la imagen */}
       <div className="flex-shrink-0 w-1/4 flex items-center justify-center">
         <img
