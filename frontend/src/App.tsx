@@ -15,7 +15,7 @@ import FollowedEventsPage from './pages/FollowedEventsPage';
 import EditProfilePage from './pages/EditProfilePage';
 import ProfilePage from './pages/ProfilePage';
 import CreatedForumPage from './pages/CreatedForumPage';
-
+import NotFoundPage from './pages/NotFoundPage';
 import './App.css';
 import './index.css';
 import Login from './components/Forms/LoginState';
@@ -59,6 +59,7 @@ const App: React.FC = () => {
 
             <main className="main-content">
             <Routes> 
+            <Route path="/*" element={<NotFoundPage />} />
               <Route path="/" element={<HomePage />} />
               <Route path="/courses" element={<CoursesPage />} />
               <Route path="/forums" element={<ForumPage />} />
@@ -69,6 +70,7 @@ const App: React.FC = () => {
               <Route path="/created-events" element={<CreatedEventsPage />} />
               <Route path="/followed-events" element={<FollowedEventsPage />} />
               <Route path="/created-forums" element={<CreatedForumPage />} />
+             
               <Route path="/profile" element={<ProfilePage userAvatar={''} userName={''} userDescription={''} userAge={0} isAgeVisible={false} />} />
               <Route path="/edit-profile" element={<EditProfilePage userAvatar={''} userGender={''} onUpdateProfile={function (newAvatar: string, newGender: string): void {
                   throw new Error('Function not implemented.');
