@@ -13,6 +13,7 @@ interface Forum {
 
 const Forums: React.FC = () => {
   const [forums, setForums] = useState<Forum[]>([]);
+  const [filteredForums, setFilteredForums] = useState<Forum[]>([]); // Estado para los foros filtrados
   const [loading, setLoading] = useState<boolean>(true);
 
   useEffect(() => {
@@ -24,6 +25,7 @@ const Forums: React.FC = () => {
         }
         const data = await response.json();
         setForums(data);
+        setFilteredForums(data); // Al principio, los foros filtrados son iguales a todos los foros
       } catch (error) {
         console.error('Error al obtener los foros:', error);
       } finally {
@@ -34,11 +36,22 @@ const Forums: React.FC = () => {
     fetchForums();
   }, []);
 
+  const handleSearch = (searchTerm: string) => {
+    if (searchTerm.trim() === '') {
+      setFilteredForums(forums); // Si no hay búsqueda, mostramos todos los foros
+    } else {
+      const filtered = forums.filter((forum) =>
+        forum.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        forum.description.toLowerCase().includes(searchTerm.toLowerCase())
+      );
+      setFilteredForums(filtered); // Filtramos los foros según el término de búsqueda
+    }
+  };
+
   return (
     <div>
       <div className="p-4 m-2 flex justify-center gap-4">
-        <ForumSearch onSearch={() => { /* Implementar búsqueda aquí */ }} />
-
+        <ForumSearch onSearch={handleSearch} />
         <Link to="/created-forums">
           <button className="bg-white rounded-lg p-2 font-bold shadow-md text-pink-500">
             Mis foros
@@ -47,12 +60,12 @@ const Forums: React.FC = () => {
       </div>
 
       <div className="p-4 m-2 flex flex-col justify-center gap-4">
-        <p>{loading ? 'Cargando foros...' : `${forums.length} nuevos posts`}</p>
+        <p>{loading ? 'Cargando foros...' : `${filteredForums.length} nuevos posts`}</p>
 
         {loading ? (
           <p>Cargando...</p>
-        ) : forums.length > 0 ? (
-          forums.map((forum) => (
+        ) : filteredForums.length > 0 ? (
+          filteredForums.map((forum) => (
             <ForumCard
               key={forum.forum_id}
               title={forum.title}

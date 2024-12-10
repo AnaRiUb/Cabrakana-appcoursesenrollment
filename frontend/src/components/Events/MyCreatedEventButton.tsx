@@ -15,11 +15,12 @@ interface Event {
   lat: number;
   lng: number;
 }
-
 const MyCreatedEventButton: React.FC<MyCreatedEventButtonProps> = ({ onCreate, user_id }) => {
   const [showForm, setShowForm] = useState(false);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [imageURL, setImageURL] = useState<string>("");
+
   const [newEvent, setNewEvent] = useState({
     title: "",
     description: "",
@@ -27,22 +28,39 @@ const MyCreatedEventButton: React.FC<MyCreatedEventButtonProps> = ({ onCreate, u
     image: "",
     location: "",
   });
-  const [followedEvents, setFollowedEvents] = useState<any[]>([]); // Estado para almacenar los eventos seguidos
 
-  // Obtener eventos seguidos cuando se monta el componente
-  useEffect(() => {
-    const fetchFollowedEvents = async () => {
-      try {
-        const response = await fetch(`http://localhost:3000/users/${user_id}/followed-events`);
-        const data = await response.json();
-        setFollowedEvents(data); // Establecer los eventos seguidos en el estado
-      } catch (error) {
-        console.error("Error fetching followed events:", error);
-      }
-    };
+  const [followedEvents, setFollowedEvents] = useState<any[]>([]);
 
-    fetchFollowedEvents();
-  }, [user_id]); // Solo vuelve a ejecutarse si cambia el user_id
+  const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0];
+    if (file) {
+      uploadImageToCloudinary(file); 
+    }
+  };
+
+  const uploadImageToCloudinary = async (imageFile: File) => {
+    setLoading(true); // Deshabilitar el botón al iniciar la carga de la imagen
+    const formData = new FormData();
+    formData.append("file", imageFile);
+    formData.append("upload_preset", "apptofindevents"); 
+    formData.append("cloud_name", "dyg2tq33j"); 
+
+    try {
+      const response = await fetch("https://api.cloudinary.com/v1_1/dyg2tq33j/image/upload", {
+        method: "POST",
+        body: formData,
+      });
+
+      const data = await response.json();
+      const imageUrl = data.secure_url;
+      setImageURL(imageUrl); 
+      console.log("Imagen subida exitosamente:", imageUrl);
+    } catch (err) {
+      console.log(err);
+    } finally {
+      setLoading(false); // Habilitar el botón después de la carga
+    }
+  };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -61,23 +79,37 @@ const MyCreatedEventButton: React.FC<MyCreatedEventButtonProps> = ({ onCreate, u
       }
 
       const data = await response.json();
-
       if (data.status !== "OK" || data.results.length === 0) {
         throw new Error("Dirección no válida. Intenta de nuevo.");
       }
 
       const { lat, lng } = data.results[0].geometry.location;
 
-      onCreate({
-        id: new Date().toISOString(),
+      const newEventData = {
         title: newEvent.title,
         description: newEvent.description,
-        date: newEvent.date,
-        image: newEvent.image,
+        event_date: newEvent.date,
+        event_image_url: imageURL,
         location: newEvent.location,
-        lat,
-        lng,
+        latitude: lat,
+        longitude: lng,
+        created_by: user_id, // Utiliza el user_id proporcionado
+      };
+
+      const createEventResponse = await fetch("http://localhost:4000/events", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(newEventData),
       });
+
+      if (!createEventResponse.ok) {
+        throw new Error("Error al crear el evento.");
+      }
+
+      const createdEvent = await createEventResponse.json();
+      onCreate(createdEvent); // Llamar a onCreate para actualizar el estado en el componente padre
 
       setShowForm(false);
       setNewEvent({
@@ -116,6 +148,7 @@ const MyCreatedEventButton: React.FC<MyCreatedEventButtonProps> = ({ onCreate, u
       <button
         className="bg-blue-500 text-white px-4 py-2 rounded"
         onClick={() => setShowForm(true)}
+        disabled={loading} // Deshabilita el botón mientras se está cargando la imagen
       >
         Crear nuevo evento
       </button>
@@ -155,9 +188,7 @@ const MyCreatedEventButton: React.FC<MyCreatedEventButtonProps> = ({ onCreate, u
                 type="file"
                 accept="image/*"
                 className="block p-2 w-full mb-2 border rounded"
-                onChange={(e) =>
-                  setNewEvent({ ...newEvent, image: URL.createObjectURL(e.target.files![0]) })
-                }
+                onChange={handleFileChange}
               />
               {error && <p className="text-red-500 text-sm mb-2">{error}</p>}
               <div className="flex justify-between mt-4">
@@ -171,7 +202,7 @@ const MyCreatedEventButton: React.FC<MyCreatedEventButtonProps> = ({ onCreate, u
                 <button
                   type="submit"
                   className="bg-green-500 text-white px-4 py-2 rounded"
-                  disabled={loading}
+                  disabled={loading} // Deshabilita el botón mientras se está cargando la imagen
                 >
                   {loading ? "Creando..." : "Crear Evento"}
                 </button>
@@ -183,5 +214,4 @@ const MyCreatedEventButton: React.FC<MyCreatedEventButtonProps> = ({ onCreate, u
     </div>
   );
 };
-
 export default MyCreatedEventButton;

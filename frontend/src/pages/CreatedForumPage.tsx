@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import MyCreatedForumsButton from "../components/Forums/MyCreatedForumsButton";
 
 interface Forum {
@@ -8,10 +8,32 @@ interface Forum {
 }
 
 const CreatedForumPage: React.FC = () => {
-  const [forums, setForums] = useState<Forum[]>([
-    { id: "1", title: "Foro de Tecnología", description: "Discute sobre lo último en tecnología." },
-    { id: "2", title: "Foro de Cine", description: "Comparte y comenta tus películas favoritas." },
-  ]);
+  const [forums, setForums] = useState<Forum[]>([]); // Estado para almacenar foros
+  const [loading, setLoading] = useState<boolean>(true); // Estado de carga
+  const [error, setError] = useState<string | null>(null); // Estado de error
+
+  const user_id = "ad235556-0eae-47a5-8d84-e3046e703eb0"; // Este es un ejemplo, reemplázalo con el user_id real
+
+  useEffect(() => {
+    const fetchForums = async () => {
+      try {
+        const response = await fetch(`http://localhost:4000/forums/${user_id}`);
+        
+        if (!response.ok) {
+          throw new Error("Error al obtener los foros");
+        }
+        
+        const data = await response.json();
+        setForums(data); // Actualiza el estado con los foros obtenidos del API
+      } catch (err: any) {
+        setError(err.message); // Establece el error si ocurre
+      } finally {
+        setLoading(false); // Cambia el estado de carga a false cuando se complete
+      }
+    };
+
+    fetchForums();
+  }, [user_id]); // El useEffect se ejecutará al montar el componente y cuando cambie el user_id
 
   const addNewForum = (newForum: Forum) => {
     setForums((prevForums) => [...prevForums, newForum]);
@@ -26,7 +48,11 @@ const CreatedForumPage: React.FC = () => {
 
       <div className="bg-gray-100 p-4 rounded-lg shadow-md">
         <h2 className="text-xl font-semibold mb-4">Foros que estás moderando</h2>
-        {forums.length > 0 ? (
+        {loading ? (
+          <p>Cargando foros...</p>
+        ) : error ? (
+          <p className="text-red-500">Error: {error}</p>
+        ) : forums.length > 0 ? (
           <ul className="space-y-4">
             {forums.map((forum) => (
               <li
@@ -39,7 +65,7 @@ const CreatedForumPage: React.FC = () => {
             ))}
           </ul>
         ) : (
-          <p className="text-gray-500">No estás moderando ningún foro actualmente.</p>
+          <p className="text-gray-500">No has creado ningún foro todavía.</p>
         )}
       </div>
     </div>

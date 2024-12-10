@@ -13,7 +13,6 @@ app.use(express.json());
 
 app.use(express.json());
 app.use('', userRoutes);
-
 app.post('/api/auth/google', createUserHandler);
 
 const PORT = process.env.PORT || 4000;
