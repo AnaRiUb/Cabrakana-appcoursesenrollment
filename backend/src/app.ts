@@ -1,15 +1,20 @@
 import express, { Application } from 'express';
 import userRoutes from './routes/user.routes';
-import cors from 'cors'; // Para habilitar CORS si es necesario
+import cors from 'cors';
 import bodyParser from 'body-parser';
+import { createUserHandler } from './controllers/auth.Controller';
 
-const app: Application = express(); // Asegúrate de usar el tipo Application de Express
-// Middleware
+
+const app: Application = express();
+
 app.use(cors());
-app.use(bodyParser.json()); // Para parsear JSON
+app.use(bodyParser.json());
+app.use(express.json()); 
 
 app.use(express.json());
-app.use('/api', userRoutes);
+app.use('', userRoutes);
+
+app.post('/api/auth/google', createUserHandler);
 
 const PORT = process.env.PORT || 4000;
 
