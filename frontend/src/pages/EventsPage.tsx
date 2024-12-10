@@ -72,18 +72,18 @@ const EventPage: React.FC = () => {
         ) : (
           filteredEvents.map((event) => (
             <EventCard
-              key={event.event_id}
-              title={event.title}
-              description={event.description}
-              date={event.event_date}
-              image={event.event_image_url}
-              location={event.location}
-              lat={event.latitude}
-              lng={event.longitude}
-              onClick={() => handleEventClick(event.event_id)} 
-              event_id={event.event_id} 
-              user_id={event.created_by}
-            />
+            key={event.event_id}
+            title={event.title}
+            description={event.description}
+            date={event.event_date}
+            image={event.event_image_url}
+            location={event.location}
+            lat={event.latitude}
+            lng={event.longitude}
+            onClick={() => handleEventClick(event.event_id)} 
+            event_id={event.event_id} 
+            user_id={event.created_by} 
+          />
           ))
         )}
       </div>

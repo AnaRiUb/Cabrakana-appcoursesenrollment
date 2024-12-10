@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import MyCreatedEventButton from "../components/Events/MyCreatedEventButton";
-import { GoogleMap, LoadScript, Marker, MarkerF } from "@react-google-maps/api";
+import { GoogleMap, LoadScript, MarkerF } from "@react-google-maps/api";
 
 interface Event {
   id: string;
@@ -12,32 +12,37 @@ interface Event {
   lat: number;
   lng: number;
 }
-
 const CreatedEventsPage: React.FC = () => {
   const [events, setEvents] = useState<Event[]>([]);
-  const userId = "ad235556-0eae-47a5-8d84-e3046e703eb0"; // Reemplaza con el ID real del usuario.
+
+  // Obtener el userId del localStorage, o un valor predeterminado si no existe
+  const userId = localStorage.getItem("user_id") || ""; // Si no existe, usa una cadena vacía
 
   useEffect(() => {
-    const fetchEvents = async () => {
-      try {
-        const response = await fetch(`http://localhost:4000/events/${userId}`);
-        const data = await response.json();
+    if (userId) { // Verifica que userId no sea vacío
+      const fetchEvents = async () => {
+        try {
+          const response = await fetch(`http://localhost:4000/events/${userId}`);
+          const data = await response.json();
 
-        // Convertir latitud y longitud a números con parseFloat
-        const parsedEvents = data.map((event: any) => ({
-          ...event,
-          lat: parseFloat(event.latitude),
-          lng: parseFloat(event.longitude),
-        }));
+          // Convertir latitud y longitud a números con parseFloat
+          const parsedEvents = data.map((event: any) => ({
+            ...event,
+            lat: parseFloat(event.latitude),
+            lng: parseFloat(event.longitude),
+          }));
 
-        setEvents(parsedEvents);
-      } catch (error) {
-        console.error("Error al obtener los eventos:", error);
-      }
-    };
+          setEvents(parsedEvents);
+        } catch (error) {
+          console.error("Error al obtener los eventos:", error);
+        }
+      };
 
-    fetchEvents();
-  }, [userId]);
+      fetchEvents();
+    } else {
+      console.error("No se encontró el user_id en localStorage.");
+    }
+  }, [userId]); // Re-llamar a useEffect si userId cambia
 
   return (
     <div className="p-6">

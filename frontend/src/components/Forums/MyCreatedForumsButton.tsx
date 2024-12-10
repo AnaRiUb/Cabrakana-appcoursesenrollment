@@ -30,7 +30,7 @@ const MyCreatedForumsButton: React.FC<MyCreatedForumsButtonProps> = ({ onCreate 
       id: Date.now().toString(), // ID temporal, podría generarse desde el backend
       title: formValues.title,
       description: formValues.description,
-      created_by: "ad235556-0eae-47a5-8d84-e3046e703eb0", // Reemplaza con el ID del creador si es necesario
+      created_by: localStorage.getItem("user_id"),// Reemplaza con el ID del creador si es necesario
       created_at: new Date().toISOString(),
     };
 

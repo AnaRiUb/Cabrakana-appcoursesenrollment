@@ -17,9 +17,9 @@ const FollowedEventsPage: React.FC = () => {
   useEffect(() => {
     const fetchFollowedEvents = async () => {
       try {
-        const userId = localStorage.getItem("userId"); // Suponiendo que tienes el userId guardado
-        const userId2= "ad235556-0eae-47a5-8d84-e3046e703eb0";
-        const response = await fetch(`http://localhost:4000/events/followed/${userId2}`);
+        const userId = localStorage.getItem("user_id"); // Suponiendo que tienes el userId guardado
+
+        const response = await fetch(`http://localhost:4000/events/followed/${userId}`);
         if (!response.ok) {
           throw new Error("Error al obtener los eventos seguidos");
         }

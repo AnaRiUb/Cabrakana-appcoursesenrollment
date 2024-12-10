@@ -1,5 +1,5 @@
-import React from "react";
-import { GoogleMap, LoadScript, Marker, MarkerF } from "@react-google-maps/api";
+import React, { useEffect, useState } from "react";
+import { GoogleMap, LoadScript, MarkerF } from "@react-google-maps/api";
 
 interface EventCardProps {
   title: string;
@@ -11,7 +11,7 @@ interface EventCardProps {
   image: string;
   onClick: () => void;
   event_id: string; // Ya lo pasas como prop
-  user_id: "ad235556-0eae-47a5-8d84-e3046e703eb0"; // Este también lo pasas como prop
+  user_id: string; // Cambiado a string para ser dinámico
 }
 
 const EventCard: React.FC<EventCardProps> = ({
@@ -24,18 +24,32 @@ const EventCard: React.FC<EventCardProps> = ({
   image,
   onClick,
   event_id,
-  user_id,
 }) => {
-  
+  // Estado para almacenar el user_id del localStorage
+  const [userId, setUserId] = useState<string | null>(null);
+
+  useEffect(() => {
+    // Obtén el user_id desde el localStorage
+    const storedUserId = localStorage.getItem("user_id");
+    if (storedUserId) {
+      setUserId(storedUserId); // Actualiza el estado con el valor del localStorage
+    }
+  }, []);
+
   // Función para seguir el evento
   const handleFollowEvent = async () => {
+    if (!userId) {
+      alert("No estás autenticado.");
+      return;
+    }
+
     try {
       const response = await fetch("http://localhost:4000/events/follow", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ user_id, event_id }), // Enviando user_id y event_id
+        body: JSON.stringify({ user_id: userId, event_id }), // Usamos el userId del estado
       });
 
       const data = await response.json();

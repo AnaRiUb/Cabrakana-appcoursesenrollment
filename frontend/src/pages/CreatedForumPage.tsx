@@ -12,27 +12,32 @@ const CreatedForumPage: React.FC = () => {
   const [loading, setLoading] = useState<boolean>(true); // Estado de carga
   const [error, setError] = useState<string | null>(null); // Estado de error
 
-  const user_id = "ad235556-0eae-47a5-8d84-e3046e703eb0"; // Este es un ejemplo, reemplázalo con el user_id real
+  // Obtener el user_id desde localStorage
+  const user_id = localStorage.getItem("user_id") || ""; // Si no existe, usa una cadena vacía
 
   useEffect(() => {
-    const fetchForums = async () => {
-      try {
-        const response = await fetch(`http://localhost:4000/forums/${user_id}`);
-        
-        if (!response.ok) {
-          throw new Error("Error al obtener los foros");
+    if (user_id) { // Verifica que user_id no sea vacío
+      const fetchForums = async () => {
+        try {
+          const response = await fetch(`http://localhost:4000/forums/${user_id}`);
+          
+          if (!response.ok) {
+            throw new Error("No tienes ningun foro registrado por ti");
+          }
+          
+          const data = await response.json();
+          setForums(data); // Actualiza el estado con los foros obtenidos del API
+        } catch (err: any) {
+          setError(err.message); // Establece el error si ocurre
+        } finally {
+          setLoading(false); // Cambia el estado de carga a false cuando se complete
         }
-        
-        const data = await response.json();
-        setForums(data); // Actualiza el estado con los foros obtenidos del API
-      } catch (err: any) {
-        setError(err.message); // Establece el error si ocurre
-      } finally {
-        setLoading(false); // Cambia el estado de carga a false cuando se complete
-      }
-    };
+      };
 
-    fetchForums();
+      fetchForums();
+    } else {
+      console.error("No se encontró el user_id en localStorage.");
+    }
   }, [user_id]); // El useEffect se ejecutará al montar el componente y cuando cambie el user_id
 
   const addNewForum = (newForum: Forum) => {

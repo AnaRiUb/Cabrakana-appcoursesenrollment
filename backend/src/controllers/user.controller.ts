@@ -3,7 +3,7 @@ import { Request, Response } from 'express';
 import bcrypt from 'bcryptjs';
 import { prisma } from '../prisma/prismaClient'
 
-import { createUser, createCourse, createEvent, createEventFollower, createForum, createUser, getAllCourses, getAllEvents, getAllForums, getEventByUserId, getEventFollowerByUserId, getForumsByUserId, getUserByEmail } from '../services/user.service';
+import { createCourse, createEvent, createEventFollower, createForum, createUser, getAllCourses, getAllEvents, getAllForums, getEventByUserId, getEventFollowerByUserId, getForumsByUserId, getUserByEmail } from '../services/user.service';
 ;
 
 
