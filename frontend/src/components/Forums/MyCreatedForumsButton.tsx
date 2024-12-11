@@ -3,7 +3,7 @@ import React, { useState } from "react";
 interface MyCreatedForumsButtonProps {
   onCreate: (forum: { id: string; title: string; description: string }) => void;
 }
-
+const apiUrl = process.env.REACT_APP_API_URL;
 const MyCreatedForumsButton: React.FC<MyCreatedForumsButtonProps> = ({ onCreate }) => {
   const [isModalOpen, setModalOpen] = useState(false);
   const [formValues, setFormValues] = useState({
@@ -36,7 +36,7 @@ const MyCreatedForumsButton: React.FC<MyCreatedForumsButtonProps> = ({ onCreate 
 
     try {
       // Realiza la petición POST usando fetch
-      const response = await fetch("http://localhost:4000/forums", {
+      const response = await fetch(`http://${apiUrl}/forums`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

@@ -28,6 +28,7 @@ const EditProfilePage: React.FC<EditProfilePageProps> = ({
   const [newDescription, setNewDescription] = useState<string>(userDescription);
   const [newAge, setNewAge] = useState<number>(userAge);
   const [ageVisible, setAgeVisible] = useState<boolean>(isAgeVisible);
+  const apiUrl = process.env.REACT_APP_API_URL;
  const user_id = 'd1c066d5-9c9a-4f8d-ae28-bb3a6452ea10';
   useEffect(() => {
 
@@ -50,7 +51,7 @@ const EditProfilePage: React.FC<EditProfilePageProps> = ({
     onUpdateProfile(newAvatar, newGender, newDescription, newAge, ageVisible);
 
     try {
-      const response = await fetch('http://localhost:4000/update-profile', {
+      const response = await fetch(`http://${apiUrl}/update-profile`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',

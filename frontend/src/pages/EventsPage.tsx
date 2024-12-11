@@ -9,12 +9,12 @@ const EventPage: React.FC = () => {
   const [filteredEvents, setFilteredEvents] = useState<Array<any>>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
-
+  const apiUrl = process.env.REACT_APP_API_URL;
  
   useEffect(() => {
     const fetchEvents = async () => {
       try {
-        const response = await fetch("http://localhost:4000/events"); 
+        const response = await fetch(`http://${apiUrl}/events`); 
         if (!response.ok) {
           throw new Error("Error al obtener eventos");
         }

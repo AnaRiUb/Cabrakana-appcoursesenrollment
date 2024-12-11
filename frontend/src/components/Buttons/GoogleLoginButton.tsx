@@ -11,13 +11,13 @@ interface MyToken {
 const GoogleLoginButton: React.FC = () => {
   const { login } = useAuth(); 
   const navigate = useNavigate(); 
-
+  const apiUrl = process.env.REACT_APP_API_URL;
   const handleGoogleLoginSuccess = async (response: any) => {
     const token = response.credential;
     if (token) {
       try {
         
-        const backendResponse = await fetch('http://localhost:4000/api/auth/google', {
+        const backendResponse = await fetch(`http://${apiUrl}/api/auth/google`, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ token }),
@@ -44,7 +44,7 @@ const GoogleLoginButton: React.FC = () => {
 
        
           try {
-            const response = await fetch("http://localhost:4000/users/"+ decoded2.email , {
+            const response = await fetch(`http://${apiUrl}/users/`+ decoded2.email , {
               method: "GET",
               headers: {
                 "Content-Type": "application/json",

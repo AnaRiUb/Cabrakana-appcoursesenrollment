@@ -16,14 +16,14 @@ interface Event {
 
 const CreatedEventsPage: React.FC = () => {
   const [events, setEvents] = useState<Event[]>([]);
-
+  const apiUrl = process.env.REACT_APP_API_URL;
   const userId = localStorage.getItem("user_id") || "";
 
   useEffect(() => {
     if (userId) {
       const fetchEvents = async () => {
         try {
-          const response = await fetch(`http://localhost:4000/events/${userId}`);
+          const response = await fetch(`http://${apiUrl}/events/${userId}`);
           const data = await response.json();
 
           const parsedEvents = data.map((event: any) => ({
@@ -47,7 +47,7 @@ const CreatedEventsPage: React.FC = () => {
 
   const deleteEvent = async (eventId: string) => {
     try {
-      const response = await fetch(`http://localhost:4000/events/${eventId}`, {
+      const response = await fetch(`http://${apiUrl}/events/${eventId}`, {
         method: "DELETE",
       });
       if (response.ok) {
@@ -62,7 +62,7 @@ const CreatedEventsPage: React.FC = () => {
 
   const cancelEvent = async (eventId: string) => {
     try {
-      const response = await fetch(`http://localhost:4000/events/cancel/${eventId}`, {
+      const response = await fetch(`http://${apiUrl}/events/cancel/${eventId}`, {
         method: "PUT", 
         headers: {
           "Content-Type": "application/json",

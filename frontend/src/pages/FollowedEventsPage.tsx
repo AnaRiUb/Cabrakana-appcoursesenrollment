@@ -19,13 +19,13 @@ interface FollowedEvent {
 
 const FollowedEventsPage: React.FC = () => {
   const [followedEvents, setFollowedEvents] = useState<FollowedEvent[]>([]);
-
+  const apiUrl = process.env.REACT_APP_API_URL;
   useEffect(() => {
     const fetchFollowedEvents = async () => {
       try {
         const userId = localStorage.getItem("user_id");
 
-        const response = await fetch(`http://localhost:4000/events/followed/${userId}`);
+        const response = await fetch(`http://${apiUrl}/events/followed/${userId}`);
         if (!response.ok) {
           throw new Error("Error al obtener los eventos seguidos");
         }

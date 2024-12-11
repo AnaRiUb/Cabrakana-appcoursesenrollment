@@ -28,7 +28,8 @@ const EventCard: React.FC<EventCardProps> = ({
   const [userId, setUserId] = useState<string | null>(null);
   const [isFollowing, setIsFollowing] = useState(false); 
 
-  
+  const apiUrl = process.env.REACT_APP_API_URL;
+
   useEffect(() => {
     const storedUserId = localStorage.getItem("user_id");
     if (storedUserId) {
@@ -55,7 +56,7 @@ const EventCard: React.FC<EventCardProps> = ({
     
 
       const response = await fetch(
-      "http://localhost:4000/events/follow", {
+      `http://${apiUrl}/events/follow`, {
         method: isFollowing ? "DELETE" : "POST",
         headers: {
           "Content-Type": "application/json",

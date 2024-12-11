@@ -8,7 +8,7 @@ const SignUpForm: React.FC = () => {
   const [email, setEmail] = useState<string>('');
   const [password, setPassword] = useState<string>('');
   const [confirmPassword, setConfirmPassword] = useState<string>('');
-
+  const apiUrl = process.env.REACT_APP_API_URL;
   const handleSubmit = async (event: React.FormEvent) => {
     event.preventDefault();
     
@@ -28,7 +28,7 @@ const SignUpForm: React.FC = () => {
 
     console.log('Registro de usuario:', { name, username, email, password });
     try {
-      const response = await fetch('http://localhost:3000/api/users/register', {
+      const response = await fetch(`http://${apiUrl}/api/users/register`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

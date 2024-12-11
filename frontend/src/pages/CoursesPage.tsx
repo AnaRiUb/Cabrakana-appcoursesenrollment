@@ -16,11 +16,11 @@ const CoursesPage: React.FC = () => {
   const [courses, setCourses] = useState<Course[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
-
+  const apiUrl = process.env.REACT_APP_API_URL;
   useEffect(() => {
     const fetchCourses = async () => {
       try {
-        const response = await fetch('http://localhost:4000/courses');
+        const response = await fetch(`http://${apiUrl}/courses`);
         const data = await response.json();
         setCourses(data);
         setLoading(false);

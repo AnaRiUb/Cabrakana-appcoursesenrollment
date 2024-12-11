@@ -3,11 +3,11 @@ import { useNavigate } from 'react-router-dom';
 
 const GoogleSignInButton: React.FC = () => {
   const navigate = useNavigate(); 
-
+  const apiUrl = process.env.REACT_APP_API_URL;
   const handleGoogleSignIn = async () => {
     try {
      
-      const googleAuthURL = 'http://localhost:4000/api/auth/google';
+      const googleAuthURL = `http://${apiUrl}/api/auth/google`;
 
     
       const authWindow = window.open(

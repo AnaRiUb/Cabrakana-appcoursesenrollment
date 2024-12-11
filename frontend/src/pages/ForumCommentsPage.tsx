@@ -25,7 +25,7 @@ const ForumsCommentPage: React.FC = () => {
   const [forumTitle, setForumTitle] = useState<string>('');
   const [forumDescription, setForumDescription] = useState<string>('');
   const [forumCreator, setForumCreator] = useState<string>('');
-
+  const apiUrl = process.env.REACT_APP_API_URL;
   useEffect(() => {
     
     const forumId = localStorage.getItem('forum_id')
@@ -46,7 +46,7 @@ const ForumsCommentPage: React.FC = () => {
       }
 
       try {
-       const response = await fetch(`http://localhost:4000/forumComments/${forumId}`);
+       const response = await fetch(`http://${apiUrl}/forumComments/${forumId}`);
         if (!response.ok) {
           throw new Error('Error al obtener los foros');
         }

@@ -19,13 +19,14 @@ const Forums: React.FC = () => {
   const [forums, setForums] = useState<Forum[]>([]);
   const [filteredForums, setFilteredForums] = useState<Forum[]>([]); 
   const [loading, setLoading] = useState<boolean>(true);
-  
+  const apiUrl = process.env.REACT_APP_API_URL;
+
   const navigate = useNavigate();
 
   useEffect(() => {
     const fetchForums = async () => {
       try {
-        const response = await fetch('http://localhost:4000/forums');
+        const response = await fetch(`http://${apiUrl}/forums`);
         if (!response.ok) {
           throw new Error('Error al obtener los foros');
         }

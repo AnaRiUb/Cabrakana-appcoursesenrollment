@@ -14,12 +14,12 @@ const CreatedForumPage: React.FC = () => {
 
   
   const user_id = localStorage.getItem("user_id") || "";
-
+  const apiUrl = process.env.REACT_APP_API_URL;
   useEffect(() => {
     if (user_id) {
       const fetchForums = async () => {
         try {
-          const response = await fetch(`http://localhost:4000/forums/${user_id}`);
+          const response = await fetch(`http://${apiUrl}/forums/${user_id}`);
           
           if (!response.ok) {
             throw new Error("No tienes ningun foro registrado. Aqui se mostraran los foros creados por ti.");

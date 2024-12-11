@@ -111,7 +111,7 @@ const MyCreatedEventButton: React.FC<MyCreatedEventButtonProps> = ({ onCreate, u
         created_by: user_id,
       };
 
-      const createEventResponse = await fetch("http://localhost:4000/events", {
+      const createEventResponse = await fetch(`http://${apiUrl}/events`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
