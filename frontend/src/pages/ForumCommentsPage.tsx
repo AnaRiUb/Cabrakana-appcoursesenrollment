@@ -22,9 +22,22 @@ const ForumsCommentPage: React.FC = () => {
   const [filteredForums, setFilteredForums] = useState<ForumComments[]>([]); // Estado para los foros filtrados
   const [loading, setLoading] = useState<boolean>(true);
   const [showCommentModal, setShowCommentModal] = useState(false);
+  const [forumTitle, setForumTitle] = useState<string>('');
+  const [forumDescription, setForumDescription] = useState<string>('');
+  const [forumCreator, setForumCreator] = useState<string>('');
+
   useEffect(() => {
+    
     const forumId = localStorage.getItem('forum_id')
 
+    const forum_title = localStorage.getItem('forum_title')
+    const forum_description = localStorage.getItem('forum_description')
+    const forum_creator = localStorage.getItem('forum_creator')
+
+
+    setForumTitle(forum_title ?? '');
+    setForumDescription(forum_description ?? '');
+    setForumCreator(forum_creator ?? '');
     const fetchForums = async () => {
 
       if (!forumId) {
@@ -86,6 +99,20 @@ const ForumsCommentPage: React.FC = () => {
           Agregar Comentario
         </button>
       </div>
+
+      {/* Mostrar el título y la descripción del foro antes de los comentarios */}
+      <div className="p-4 m-2 bg-white rounded shadow-md">
+        {loading ? (
+          <p>Cargando datos del foro...</p>
+        ) : (
+          <>
+            <h2 className="text-2xl font-bold mb-2">{forumTitle}</h2>
+            <p className="text-gray-700 mb-4">{forumDescription}</p>
+            <label className="text-xs text-gray-700 mb-2">Creado por: {forumCreator}</label>
+          </>
+        )}
+      </div>
+
       <MyCreatedForumCommentsButton
         visible={showCommentModal}
         onClose={() => setShowCommentModal(false)}

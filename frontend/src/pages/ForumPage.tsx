@@ -53,9 +53,13 @@ const Forums: React.FC = () => {
     }
   };
 
-  const handleForumClick = (forum_id: string) => {
+  const handleForumClick = (forum_id: string, title: string, description: string, creator: string) => {
     // Guardar el forum_id en el localStorage
     localStorage.setItem('forum_id', forum_id);
+    localStorage.setItem('forum_title', title);
+    localStorage.setItem('forum_description', description);
+    localStorage.setItem('forum_creator', creator);
+    
     // Redirigir a la página de comentarios
     navigate('/forum-comments');
   };
@@ -85,7 +89,7 @@ const Forums: React.FC = () => {
               author={forum.creator.username}
               createdAt={new Date(forum.created_at).toLocaleDateString()}
               image={''}
-              onClick={() => handleForumClick(forum.forum_id)} // Llamamos a la función aquí
+              onClick={() => handleForumClick(forum.forum_id, forum.title, forum.description, forum.creator.username)} // Llamamos a la función aquí
             />
           ))
         ) : (
