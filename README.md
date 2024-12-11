@@ -1,5 +1,5 @@
 <p align="center">
-    <img src="./svg/mi-icono.svg" alt="Piwis Logo" height="70">
+    <img src="https://res.cloudinary.com/dyg2tq33j/image/upload/v1733893930/PIWSICON_xm4rot.jpg" alt="Piwis Logo" width="32" height="32"> Piwis
 </p>
 
 <h2 align="center">Frontend Repository</h2>
@@ -16,8 +16,8 @@
 
 <p align="center">
     <a href="sv-okqeu9h5xb.cloud.elastika.pe:3000">
-        <img src="./svg/mi-icono.svg" alt="Website Link">
-    </a>
+        <img src="[./svg/mi-icono.svg](https://res.cloudinary.com/dyg2tq33j/image/upload/v1733893930/PIWSICON_xm4rot.jpg)" width="32" height="32" alt="Website Link"> Website Link
+    </a> 
     <a href="https://github.com/AnaRiUb/Cabrakana-appcoursesenrollment">
     <img src="https://github.githubassets.com/images/modules/logos_page/GitHub-Mark.png" alt="Repository Link" width="32" height="32">
     </a>
