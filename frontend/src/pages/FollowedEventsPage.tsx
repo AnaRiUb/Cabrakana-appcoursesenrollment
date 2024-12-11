@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react";
 import EventCard from "../components/Events/EventCard";
-import { GoogleMap, LoadScript, MarkerF } from "@react-google-maps/api";
 
 
 interface FollowedEvent {
@@ -54,7 +53,7 @@ const FollowedEventsPage: React.FC = () => {
           const lat = parseFloat(e.latitude);
           const lng = parseFloat(e.longitude);
 
-          // Lógica de imagen por defecto
+        
           const imageUrl =
             e.event_image_url && e.event_image_url.trim() !== ""
               ? e.event_image_url
@@ -68,8 +67,8 @@ const FollowedEventsPage: React.FC = () => {
               date={e.event_date}
               image={imageUrl}
               location={e.location}
-              lat={isNaN(lat) ? 0 : lat}  // Si lat no es un número, usa 0 para evitar errores
-              lng={isNaN(lng) ? 0 : lng}  // Si lng no es un número, usa 0
+              lat={isNaN(lat) ? 0 : lat} 
+              lng={isNaN(lng) ? 0 : lng}  
               onClick={() => handleEventClick(followedEvent.event_id)}
               event_id={followedEvent.event_id}
               user_id={e.created_by}

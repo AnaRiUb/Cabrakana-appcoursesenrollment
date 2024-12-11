@@ -29,7 +29,7 @@ const HomePage: React.FC = () => {
 
   return (
     <div className="max-w-6xl mx-auto mt-0 bg-gray-50 min-h-screen p-6">
-      {/* Mostrar contenido basado en si el usuario está autenticado */}
+    
 
       {!isAuthenticated && (
         <section className="m-8 p-4 flex gap-6 flex-col items-center justify-center text-center bg-gradient-to-r from-indigo-500 to-purple-600 text-white rounded-lg shadow-xl">
@@ -72,7 +72,7 @@ const HomePage: React.FC = () => {
       </>
       )}
 
-      {/* Carousel y otras secciones */}
+    
       <section className="my-12 p-4 lg:w-4/5 h-auto mx-auto">
         <div className="p-4 flex justify-center">
           <ImageCarouselHome />
@@ -82,9 +82,9 @@ const HomePage: React.FC = () => {
         </h2>
       </section>
 
-      {/* Cards */}
+    
       <section className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-        {/* Cursos */}
+       
         <div className="bg-white shadow-lg rounded-lg p-6 text-center transition-transform hover:scale-105 duration-300">
           <h3 className="text-xl font-bold mb-4 text-indigo-600">Cursos</h3>
           <p className="text-gray-600 mb-4">

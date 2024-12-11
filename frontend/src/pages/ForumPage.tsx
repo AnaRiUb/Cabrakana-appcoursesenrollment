@@ -7,6 +7,7 @@ interface Forum {
   forum_id: string;
   creator: {
     username: string;
+    profile_image: string;
   } ;
   title: string;
   description: string;
@@ -24,7 +25,7 @@ const Forums: React.FC = () => {
   useEffect(() => {
     const fetchForums = async () => {
       try {
-        const response = await fetch('http://localhost:4000/forums'); // Cambia la URL a tu endpoint real
+        const response = await fetch('http://localhost:4000/forums');
         if (!response.ok) {
           throw new Error('Error al obtener los foros');
         }
@@ -54,13 +55,13 @@ const Forums: React.FC = () => {
   };
 
   const handleForumClick = (forum_id: string, title: string, description: string, creator: string) => {
-    // Guardar el forum_id en el localStorage
+
     localStorage.setItem('forum_id', forum_id);
     localStorage.setItem('forum_title', title);
     localStorage.setItem('forum_description', description);
     localStorage.setItem('forum_creator', creator);
     
-    // Redirigir a la página de comentarios
+
     navigate('/forum-comments');
   };
 
@@ -75,7 +76,7 @@ const Forums: React.FC = () => {
         </Link>
       </div>
 
-      <div className="p-4 m-2 flex flex-col justify-center gap-4">
+      <div className="max-w-6xl mx-auto p-4 m-2 flex flex-col justify-center gap-4">
         <p>{loading ? 'Cargando foros...' : `${filteredForums.length} nuevos posts`}</p>
 
         {loading ? (
@@ -88,8 +89,8 @@ const Forums: React.FC = () => {
               description={forum.description}
               author={forum.creator.username}
               createdAt={new Date(forum.created_at).toLocaleDateString()}
-              image={''}
-              onClick={() => handleForumClick(forum.forum_id, forum.title, forum.description, forum.creator.username)} // Llamamos a la función aquí
+              image={forum.creator.profile_image}
+              onClick={() => handleForumClick(forum.forum_id, forum.title, forum.description, forum.creator.username)}
             />
           ))
         ) : (

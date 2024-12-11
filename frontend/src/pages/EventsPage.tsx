@@ -5,22 +5,22 @@ import MyFollowEventsButton from "../components/Events/MyFollowEventsButton";
 import EventSearch from "../components/Events/EventSearch";
 
 const EventPage: React.FC = () => {
-  const [events, setEvents] = useState<Array<any>>([]); // Estado para almacenar eventos
-  const [filteredEvents, setFilteredEvents] = useState<Array<any>>([]); // Estado para almacenar eventos filtrados
-  const [loading, setLoading] = useState<boolean>(true); // Estado de carga
-  const [error, setError] = useState<string | null>(null); // Estado de error
+  const [events, setEvents] = useState<Array<any>>([]); 
+  const [filteredEvents, setFilteredEvents] = useState<Array<any>>([]);
+  const [loading, setLoading] = useState<boolean>(true);
+  const [error, setError] = useState<string | null>(null);
 
-  // Función para obtener eventos desde el API
+ 
   useEffect(() => {
     const fetchEvents = async () => {
       try {
-        const response = await fetch("http://localhost:4000/events"); // Cambia la URL por tu API
+        const response = await fetch("http://localhost:4000/events"); 
         if (!response.ok) {
           throw new Error("Error al obtener eventos");
         }
         const data = await response.json();
-        setEvents(data); // Actualizar el estado con los datos del API
-        setFilteredEvents(data); // Inicializar los eventos filtrados con todos los eventos
+        setEvents(data); 
+        setFilteredEvents(data); 
       } catch (err: any) {
         setError(err.message);
       } finally {
@@ -29,18 +29,17 @@ const EventPage: React.FC = () => {
     };
 
     fetchEvents();
-  }, []); // Ejecutar una vez al montar el componente
+  }, []);
 
-  // Función para manejar la búsqueda
   const handleSearch = (searchTerm: string) => {
     if (searchTerm.trim() === "") {
-      setFilteredEvents(events); // Si el término de búsqueda está vacío, restaurar todos los eventos
+      setFilteredEvents(events); 
     } else {
       const filtered = events.filter((event) =>
         event.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
         event.description.toLowerCase().includes(searchTerm.toLowerCase())
       );
-      setFilteredEvents(filtered); // Filtrar eventos según el término de búsqueda
+      setFilteredEvents(filtered);
     }
   };
 

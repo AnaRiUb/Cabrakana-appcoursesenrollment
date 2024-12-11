@@ -15,26 +15,28 @@ const FooterDesktopandMobile: React.FC = () => {
   };
 
   return (
-    <footer className="text-center box-border bg-black sm:bg-white/75">
+    <footer className="text-center bg-gradient-to-r md:from-gray-800 md:via-gray-900 to-black md:text-white">
       {isDesktop && (
-        <div className="flex justify-between items-start p-6">
-          <div className="w-1/2 px-5">
-            <h3 className="mb-2 font-bold text-lg">Sobre Nosotros</h3>
-            <p className="text-justify">
-              Piwis es una plataforma dedicada a la educación colaborativa,
-              diseñada para crear una comunidad activa de aprendizaje. Nuestro
-              objetivo es ofrecer un espacio donde estudiantes, educadores y
-              entusiastas del conocimiento puedan conectarse, compartir ideas y
-              crecer juntos. Ofreciendo la mejor experiencia a nuestros
-              usuarios.
-            </p>
-          </div>
+       <div className="flex justify-between items-start p-10 gap-8">
+       
+       <div className="w-1/2 px-5">
+         <h3 className="mb-4 font-bold text-2xl text-pink-500">Sobre Nosotros</h3>
+         <p className="text-justify leading-relaxed text-gray-300">
+           Piwis es una plataforma dedicada a la educación colaborativa,
+           diseñada para crear una comunidad activa de aprendizaje. Nuestro
+           objetivo es ofrecer un espacio donde estudiantes, educadores y
+           entusiastas del conocimiento puedan conectarse, compartir ideas y
+           crecer juntos. Ofrecemos la mejor experiencia a nuestros usuarios.
+         </p>
+       </div>
 
-          <div className="w-1/2 px-5">
-            <p className="mb-2 font-semibold">Contacto: contacto@example.com</p>
-            <p className="font-semibold">Teléfono: +51 999 999 999</p>
-          </div>
-        </div>
+     
+       <div className="w-1/2 px-5">
+         <h3 className="mb-4 font-bold text-2xl text-pink-500">Contáctanos</h3>
+         <p className="mb-2 font-semibold text-lg text-gray-300">📧 contacto@example.com</p>
+         <p className="font-semibold text-lg text-gray-300">📞 +51 999 999 999</p>
+       </div>
+     </div>
       )}
 
   {/*movil*/}
@@ -99,7 +101,7 @@ const FooterDesktopandMobile: React.FC = () => {
     ].map((item) => (
       <button
         key={item.route}
-        className={`w-1/3 flex flex-col items-center justify-around bg-white gap-2 mt-2 p-2 shadow-lg border-none cursor-pointer hover:bg-green-300 transition ${
+        className={`w-1/3 flex flex-col items-center justify-around bg-white/75 rounded-lg gap-2 mt-2 p-2 shadow-lg border-none cursor-pointer hover:bg-green-300 transition ${
           activeButton === item.route ? "bg-green-300" : ""
         }`}
         onClick={() => handleButtonClick(item.route)}

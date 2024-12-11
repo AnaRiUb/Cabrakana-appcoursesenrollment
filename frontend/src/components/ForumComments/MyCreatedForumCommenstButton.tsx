@@ -13,7 +13,7 @@ const MyCreatedForumCommentsButton: React.FC<MyCreatedForumCommentsButtonProps> 
 
   useEffect(() => {
     if (!visible) {
-      // Reiniciar los valores del formulario al cerrar el modal
+
       setFormValues({ description: "" });
     }
   }, [visible]);
@@ -33,7 +33,7 @@ const MyCreatedForumCommentsButton: React.FC<MyCreatedForumCommentsButtonProps> 
     };
 
     try {
-      // Realiza la petición POST
+
       const response = await fetch("http://localhost:4000/forumComments", {
         method: "POST",
         headers: {
@@ -49,11 +49,11 @@ const MyCreatedForumCommentsButton: React.FC<MyCreatedForumCommentsButtonProps> 
       const createdComment = await response.json();
       console.log("Comentario creado con éxito:", createdComment);
 
-      // Llamar a la función onCreate con los datos del nuevo comentario
-      onCreate({ comment_text: formValues.description });
-      onClose(); // Cierra el modal
 
-      // Refrescar la página después de crear el comentario
+      onCreate({ comment_text: formValues.description });
+      onClose(); 
+
+
       window.location.reload();
       
     } catch (error) {

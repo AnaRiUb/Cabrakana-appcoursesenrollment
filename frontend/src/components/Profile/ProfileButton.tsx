@@ -13,7 +13,10 @@ const ProfileButton: React.FC<ProfileButtonProps> = ({
 }) => {
   return (
     <div className="flex flex-col sm:flex-row sm:justify-start md:justify-center">
-      {/* Imagen de perfil con NotificationBadge */}
+     
+      {/* Imagen de perfil NotificationBadge */}
+
+      
       <div className="relative w-12 h-12">
         <Link to="/edit-profile"> 
           <img
@@ -23,7 +26,7 @@ const ProfileButton: React.FC<ProfileButtonProps> = ({
           />
         </Link>
         {/* Badge */}
-        <NotificationBadge count={notificationCount} />
+    
       </div>
 
       {/* Botón Mi Perfil */}

@@ -2,29 +2,29 @@ import React from 'react';
 import { useNavigate } from 'react-router-dom';
 
 const GoogleSignInButton: React.FC = () => {
-  const navigate = useNavigate(); // Hook para redirigir
+  const navigate = useNavigate(); 
 
   const handleGoogleSignIn = async () => {
     try {
-      // Redirigir al usuario al flujo de OAuth en el backend
+     
       const googleAuthURL = 'http://localhost:4000/api/auth/google';
 
-      // Abrir una nueva ventana para el flujo de Google OAuth
+    
       const authWindow = window.open(
         googleAuthURL,
         '_blank',
         'width=500,height=600'
       );
 
-      // Escuchar un mensaje del backend con el token de autenticación
+      
       window.addEventListener('message', (event) => {
-        if (event.origin !== 'http://localhost:3000') return; // Cambiar a tu dominio
+        if (event.origin !== 'http://localhost:3000') return;
 
         const { token } = event.data;
 
         if (token) {
-          localStorage.setItem('authToken', token); // Guardar el token
-          navigate('/'); // Redirigir a la página de inicio
+          localStorage.setItem('authToken', token);
+          navigate('/');
         }
       });
     } catch (error) {

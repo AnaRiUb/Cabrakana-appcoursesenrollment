@@ -6,7 +6,7 @@ const useAuth = () => {
 
   const login = async (credentials: { email: string; password: string }) => {
     try {
-      // Lógica para iniciar sesión
+
       const response = await fetch('/api/login', {
         method: 'POST',
         headers: {
@@ -19,7 +19,8 @@ const useAuth = () => {
 
       const data = await response.json();
       setIsAuthenticated(true);
-      // Guardar token en localStorage o estado global
+
+      
       localStorage.setItem('token', data.token);
     } catch (error) {
       console.error(error);
@@ -32,7 +33,7 @@ const useAuth = () => {
   };
 
   useEffect(() => {
-    // Verificar autenticación al cargar la aplicación
+
     const token = localStorage.getItem('token');
     if (token) {
       setIsAuthenticated(true);

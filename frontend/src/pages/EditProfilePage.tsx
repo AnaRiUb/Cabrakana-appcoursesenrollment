@@ -30,7 +30,7 @@ const EditProfilePage: React.FC<EditProfilePageProps> = ({
   const [ageVisible, setAgeVisible] = useState<boolean>(isAgeVisible);
  const user_id = 'd1c066d5-9c9a-4f8d-ae28-bb3a6452ea10';
   useEffect(() => {
-    // Inicializar la imagen según el género cuando se carga el componente
+
     if (newGender === 'hombre') {
       setNewAvatar('https://res.cloudinary.com/dyg2tq33j/image/upload/v1733872516/ednqgmor7rpybo7werke.svg');
     } else if (newGender === 'mujer') {

@@ -19,7 +19,7 @@ interface ForumComments {
 
 const ForumsCommentPage: React.FC = () => {
   const [forums, setForums] = useState<ForumComments[]>([]);
-  const [filteredForums, setFilteredForums] = useState<ForumComments[]>([]); // Estado para los foros filtrados
+  const [filteredForums, setFilteredForums] = useState<ForumComments[]>([]); 
   const [loading, setLoading] = useState<boolean>(true);
   const [showCommentModal, setShowCommentModal] = useState(false);
   const [forumTitle, setForumTitle] = useState<string>('');
@@ -52,7 +52,7 @@ const ForumsCommentPage: React.FC = () => {
         }
         const data = await response.json();
         setForums(data);
-        setFilteredForums(data); // Al principio, los foros filtrados son iguales a todos los foros
+        setFilteredForums(data); 
       } catch (error) {
         console.error('Error al obtener los foros:', error);
       } finally {
@@ -65,24 +65,23 @@ const ForumsCommentPage: React.FC = () => {
 
   const handleSearch = (searchTerm: string) => {
     if (searchTerm.trim() === '') {
-      setFilteredForums(forums); // Si no hay búsqueda, mostramos todos los foros
+      setFilteredForums(forums);
     } else {
       const filtered = forums.filter((forum) =>
         forum.user.username.toLowerCase().includes(searchTerm.toLowerCase()) ||
         forum.comment_text.toLowerCase().includes(searchTerm.toLowerCase())
       );
-      setFilteredForums(filtered); // Filtramos los foros según el término de búsqueda
+      setFilteredForums(filtered); 
     }
   };
   const handleCreateComment = (newComment: { comment_text: string }) => {
-    // Aquí puedes agregar la lógica para crear el comentario en tu backend.
-    // Por ejemplo, hacer un POST a tu API y luego actualizar el estado local.
+  
     console.log('Nuevo comentario:', newComment);
-    // Después de crear el comentario, cierra el modal:
     setShowCommentModal(false);
-    // También puedes actualizar el estado `forums` y `filteredForums` con el nuevo comentario.
+    
   };
 
+  
   return (
     <div>
       <div className="p-4 m-2 flex justify-center gap-4">
@@ -92,34 +91,37 @@ const ForumsCommentPage: React.FC = () => {
             Mis foros
           </button>
         </Link>
-        <button
-          onClick={() => setShowCommentModal(true)}
-          className="bg-blue-500 text-white px-4 py-2 rounded"
-        >
-          Agregar Comentario
-        </button>
+      
       </div>
 
-      {/* Mostrar el título y la descripción del foro antes de los comentarios */}
-      <div className="p-4 m-2 bg-white rounded shadow-md">
+     
+      <div className="max-w-6xl mx-auto p-4 px-8 m-2 bg-white/75 rounded shadow-md">
         {loading ? (
           <p>Cargando datos del foro...</p>
         ) : (
           <>
-            <h2 className="text-2xl font-bold mb-2">{forumTitle}</h2>
-            <p className="text-gray-700 mb-4">{forumDescription}</p>
-            <label className="text-xs text-gray-700 mb-2">Creado por: {forumCreator}</label>
+            <h2 className="mx-8 text-2xl font-bold mb-2">{forumTitle}</h2>
+            <p className="p-8 bg-white text-gray-700 mb-4">{forumDescription}</p>
+            <label className="mx-8 text-xs text-gray-700 mb-2">Creado por: {forumCreator}</label>
           </>
         )}
       </div>
+        <div className='flex justify-center'>
+          <MyCreatedForumCommentsButton
+            visible={showCommentModal}
+            onClose={() => setShowCommentModal(false)}
+            onCreate={handleCreateComment}
+          />
 
-      <MyCreatedForumCommentsButton
-        visible={showCommentModal}
-        onClose={() => setShowCommentModal(false)}
-        onCreate={handleCreateComment}
-      />
+            <button
+              onClick={() => setShowCommentModal(true)}
+              className="mt-5 bg-pink-500 text-white px-4 py-2 rounded-lg shadow-md"
+            >
+              Agregar Comentario
+            </button>
+        </div>
 
-      <div className="p-4 m-2 flex flex-col justify-center gap-4">
+      <div className="max-w-6xl mx-auto p-4 m-2 flex flex-col justify-center gap-4">
         <p>{loading ? 'Cargando foros...' : `${filteredForums.length} nuevos comentarios`}</p>
 
         {loading ? (
@@ -128,7 +130,7 @@ const ForumsCommentPage: React.FC = () => {
           filteredForums.map((forum) => (
             <ForumCommentCard
             key={forum.comment_id}
-            email={forum.user.email}
+            email={""}
             comment_text={forum.comment_text}
             username={forum.user.username}
             comment_date={forum.comment_date} 
@@ -137,7 +139,7 @@ const ForumsCommentPage: React.FC = () => {
             />
           ))
         ) : (
-          <p>No hay foros disponibles</p>
+          <p></p>
         )}
       </div>
     </div>

@@ -19,11 +19,9 @@ const LoginForm: React.FC = () => {
 
   const handleGoogleLogin = (response: any) => {
     if (response.tokenId) {
- // Aquí puedes manejar la autenticación con el tokenId o hacer la llamada a tu backend
-      // Por ejemplo, guardar el token en localStorage o en un estado global
+
       console.log("Autenticado con Google: ", response);
-      
-      // Redirige a la página de inicio
+    
       navigate('/');
     }
   };

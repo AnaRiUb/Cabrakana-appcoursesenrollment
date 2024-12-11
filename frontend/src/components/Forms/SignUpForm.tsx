@@ -1,13 +1,13 @@
 import React, { useState } from 'react';
-import { Link } from 'react-router-dom'; // Importar Link de react-router-dom
+import { Link } from 'react-router-dom';
 import GoogleSignInButton from '../Buttons/GoogleSignInButton';
 
 const SignUpForm: React.FC = () => {
   const [name, setName] = useState<string>('');
-  const [username, setUsername] = useState<string>(''); // Estado para el nombre de usuario
+  const [username, setUsername] = useState<string>('');
   const [email, setEmail] = useState<string>('');
   const [password, setPassword] = useState<string>('');
-  const [confirmPassword, setConfirmPassword] = useState<string>(''); // Estado para repetir contraseña
+  const [confirmPassword, setConfirmPassword] = useState<string>('');
 
   const handleSubmit = async (event: React.FormEvent) => {
     event.preventDefault();

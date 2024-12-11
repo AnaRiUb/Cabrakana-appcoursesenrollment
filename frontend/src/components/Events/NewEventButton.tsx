@@ -1,8 +1,7 @@
-// ./src/components/Events/NewEventButton.tsx
 import React from 'react';
 
 interface NewEventButtonProps {
-  onShowForm: () => void;  // Prop que permite abrir el formulario
+  onShowForm: () => void;
 }
 
 const NewEventButton: React.FC<NewEventButtonProps> = ({ onShowForm }) => {

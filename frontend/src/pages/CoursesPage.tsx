@@ -1,10 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import ImageCarousel from '../components/Carousel/ImageCarousel';
-import CourseList from '../components/Course/CourseList';
 import CourseCard from '../components/Course/CourseCard';
-import { Link } from "react-router-dom";
 
-// Definimos el tipo de los datos que devuelve la API
 interface Course {
   course_id: string;
   title: string;
@@ -16,20 +13,20 @@ interface Course {
 }
 
 const CoursesPage: React.FC = () => {
-  const [courses, setCourses] = useState<Course[]>([]); // Estado para almacenar los cursos
-  const [loading, setLoading] = useState<boolean>(true); // Estado de carga
-  const [error, setError] = useState<string | null>(null); // Estado de error
+  const [courses, setCourses] = useState<Course[]>([]);
+  const [loading, setLoading] = useState<boolean>(true);
+  const [error, setError] = useState<string | null>(null);
 
-  // Función para obtener los datos de la API
   useEffect(() => {
     const fetchCourses = async () => {
       try {
-        const response = await fetch('http://localhost:4000/courses'); // Cambia la URL por la de tu API
+        const response = await fetch('http://localhost:4000/courses');
         const data = await response.json();
         setCourses(data);
         setLoading(false);
       } catch (error) {
         console.error('Error fetching courses:', error);
+        setError('Error al cargar los cursos.');
         setLoading(false);
       }
     };
@@ -38,27 +35,25 @@ const CoursesPage: React.FC = () => {
   }, []);
 
   return (
-    <div>
-      <div className="p-4 m-2 flex justify-center gap-4">
+    <div className="max-w-6xl mx-auto flex flex-col items-center p-4 bg-gray-50 min-h-screen">
+      {/* Carrusel */}
+      <div className="w-full max-w-6xl mb-8">
         <ImageCarousel />
-        <Link to="/created-courses">
-          <button className="bg-white rounded-lg p-2 font-bold shadow-md text-pink-500">
-            Mis cursos
-          </button>
-        </Link>
       </div>
 
-      <div className="p-4 m-2 flex flex-col justify-center gap-4">
-        <p>550 new posts</p>
+    
 
-         {loading ? (
-          <p>Cargando cursos...</p>
+      {/* Contenido principal */}
+      <div className="px-8 w-full max-w-6xl">
+        {loading ? (
+          <p className="text-center text-gray-500">Cargando cursos...</p>
         ) : error ? (
-          <p>Error: {error}</p>
+          <p className="text-center text-red-500">{error}</p>
         ) : courses.length === 0 ? (
-          <p>No hay eventos disponibles</p>
+          <p className="text-center text-gray-500">No hay cursos disponibles</p>
         ) : (
-            courses.map((course) => (
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+            {courses.map((course) => (
               <CourseCard
                 key={course.course_id}
                 title={course.title}
@@ -68,8 +63,9 @@ const CoursesPage: React.FC = () => {
                 image={course.image_url || ''}
                 price={`$${course.price}`}
               />
-            ))
-          )}
+            ))}
+          </div>
+        )}
       </div>
     </div>
   );

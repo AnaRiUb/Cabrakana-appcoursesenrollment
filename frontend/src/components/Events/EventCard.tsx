@@ -26,9 +26,9 @@ const EventCard: React.FC<EventCardProps> = ({
   event_id,
 }) => {
   const [userId, setUserId] = useState<string | null>(null);
-  const [isFollowing, setIsFollowing] = useState(false); // Estado de seguimiento
+  const [isFollowing, setIsFollowing] = useState(false); 
 
-  // Obtener el `user_id` del localStorage
+  
   useEffect(() => {
     const storedUserId = localStorage.getItem("user_id");
     if (storedUserId) {
@@ -36,7 +36,7 @@ const EventCard: React.FC<EventCardProps> = ({
     }
   }, []);
 
-  // Leer el estado de seguimiento desde el localStorage al montar el componente
+  
   useEffect(() => {
     const followStatus = localStorage.getItem(`follow_event_${event_id}`);
     if (followStatus === 'true') {
@@ -44,7 +44,7 @@ const EventCard: React.FC<EventCardProps> = ({
     }
   }, [event_id]);
 
-  // Función para seguir/dejar de seguir el evento
+ 
   const handleFollowEvent = async () => {
     if (!userId) {
       alert("No estás autenticado.");
@@ -56,7 +56,7 @@ const EventCard: React.FC<EventCardProps> = ({
 
       const response = await fetch(
       "http://localhost:4000/events/follow", {
-        method: isFollowing ? "DELETE" : "POST", // DELETE para dejar de seguir, POST para seguir
+        method: isFollowing ? "DELETE" : "POST",
         headers: {
           "Content-Type": "application/json",
         },
@@ -65,9 +65,9 @@ const EventCard: React.FC<EventCardProps> = ({
 
       if (response.ok) {
         const newState = !isFollowing;
-        setIsFollowing(newState); // Alterna el estado
+        setIsFollowing(newState); 
         
-        // Guardar el estado en el localStorage
+
         localStorage.setItem(`follow_event_${event_id}`, newState ? 'true' : 'false');
 
         alert(
@@ -113,8 +113,8 @@ const EventCard: React.FC<EventCardProps> = ({
         <button
           className="m-2 p-2 rounded-lg bg-pink-500/75 hover:bg-pink-500 text-white text-sm font-bold"
           onClick={(e) => {
-            e.stopPropagation(); // Evitar activar el onClick del contenedor
-            handleFollowEvent(); // Gestionar seguimiento del evento
+            e.stopPropagation(); 
+            handleFollowEvent(); 
           }}
         >
           {isFollowing ? "Dejar de seguir el evento" : "Seguir evento"}

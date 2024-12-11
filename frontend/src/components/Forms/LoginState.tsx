@@ -6,7 +6,6 @@ import { useAuth } from '../../context/AuthContext';
 interface MyToken {
   name: string;
   token: string;
-  // whatever else is in the JWT.
 }
 const Login = () => {
   const { login } = useAuth();
@@ -14,13 +13,11 @@ const Login = () => {
     console.log('Login exitoso:', response);
 
     try {
-      // Extraer y decodificar el token de credenciales
       const decoded = jwtDecode<MyToken>(response.credential);
   
   
       console.log('Usuario decodificado:', decoded);
       localStorage.setItem('userToken', JSON.stringify(decoded));
-      // Mostrar el nombre del usuario en la consola
       if (decoded.name) {
         console.log('Nombre del usuario:', decoded.name);
         login(decoded.name);

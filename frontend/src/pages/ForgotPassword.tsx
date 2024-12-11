@@ -7,10 +7,9 @@ const ForgotPassword: React.FC = () => {
   const handleSubmit = (event: React.FormEvent) => {
     event.preventDefault();
 
-    // Lógica para enviar el correo de recuperación
     console.log('Recuperación de contraseña para:', email);
     
-    // Simulación de un mensaje de éxito
+    
     setMessage('Te hemos enviado un correo para restablecer tu contraseña.');
   };
 

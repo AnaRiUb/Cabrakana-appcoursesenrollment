@@ -15,7 +15,7 @@ import FollowedEventsPage from './pages/FollowedEventsPage';
 import EditProfilePage from './pages/EditProfilePage';
 import ProfilePage from './pages/ProfilePage';
 import CreatedForumPage from './pages/CreatedForumPage';
-import ProfileButton from './components/Profile/ProfileButton'; // Importa el componente ProfileButton
+import ProfileButton from './components/Profile/ProfileButton';
 import './App.css';
 import './index.css';
 

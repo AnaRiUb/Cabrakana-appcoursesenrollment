@@ -15,7 +15,7 @@ const MyCreatedForumsButton: React.FC<MyCreatedForumsButtonProps> = ({ onCreate 
 
   const handleCloseModal = () => {
     setModalOpen(false);
-    setFormValues({ title: "", description: "" }); // Reiniciar valores del formulario
+    setFormValues({ title: "", description: "" }); 
   };
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
@@ -27,10 +27,10 @@ const MyCreatedForumsButton: React.FC<MyCreatedForumsButtonProps> = ({ onCreate 
     e.preventDefault();
 
     const newForum = {
-      id: Date.now().toString(), // ID temporal, podría generarse desde el backend
+      id: Date.now().toString(),
       title: formValues.title,
       description: formValues.description,
-      created_by: localStorage.getItem("user_id"),// Reemplaza con el ID del creador si es necesario
+      created_by: localStorage.getItem("user_id"),
       created_at: new Date().toISOString(),
     };
 
@@ -51,7 +51,7 @@ const MyCreatedForumsButton: React.FC<MyCreatedForumsButtonProps> = ({ onCreate 
       const createdForum = await response.json();
       console.log("Foro creado con éxito:", createdForum);
 
-      onCreate(newForum); // Llama al callback con los datos del foro
+      onCreate(newForum); 
       handleCloseModal();
     } catch (error) {
       console.error("Error al crear el foro:", error);
@@ -62,7 +62,7 @@ const MyCreatedForumsButton: React.FC<MyCreatedForumsButtonProps> = ({ onCreate 
   return (
     <>
       <button
-        className="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600"
+        className="px-4 py-2 bg-pink-500 text-white rounded-lg hover:bg-blue-600"
         onClick={handleOpenModal}
       >
         Crear nuevo foro
@@ -75,7 +75,7 @@ const MyCreatedForumsButton: React.FC<MyCreatedForumsButtonProps> = ({ onCreate 
             <form onSubmit={handleSubmit} className="space-y-4">
               <div>
                 <label htmlFor="title" className="block text-sm font-medium">
-                  Nombre del grupo:
+                  Titulo del foro:
                 </label>
                 <input
                   type="text"
@@ -90,7 +90,7 @@ const MyCreatedForumsButton: React.FC<MyCreatedForumsButtonProps> = ({ onCreate 
               </div>
               <div>
                 <label htmlFor="description" className="block text-sm font-medium">
-                  Descripción del foro:
+                 Descripción:
                 </label>
                 <textarea
                   id="description"

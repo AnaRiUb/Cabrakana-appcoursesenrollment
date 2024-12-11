@@ -20,10 +20,10 @@ const EventSearch: React.FC<EventSearchProps> = ({ onSearch }) => {
           className="w-full bg-white placeholder:text-slate-500 text-slate-700 text-m border border-slate-200 rounded-md pl-3 pr-28 py-2 transition duration-300 ease focus:outline-none focus:border-slate-400 hover:border-slate-300 shadow-sm focus:shadow"
           placeholder="Buscar eventos"
           value={searchTerm}
-          onChange={(e) => setSearchTerm(e.target.value)} // Actualizar el estado del input
+          onChange={(e) => setSearchTerm(e.target.value)}
         />
         <button
-          onClick={handleSearch} // Llamar a handleSearch cuando se haga clic
+          onClick={handleSearch}
           className="absolute top-1 right-1 flex justify-center items-center rounded bg-white py-2 px-2.5 border border-transparent text-center text-xs text-pink-500 transition-all shadow-sm hover:shadow focus:bg-pink-700 focus:shadow-none active:bg-slate-300 hover:bg-slate-300 active:shadow-none disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none"
           type="button"
         >

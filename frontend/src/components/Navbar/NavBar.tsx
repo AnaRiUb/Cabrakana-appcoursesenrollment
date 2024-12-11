@@ -7,8 +7,8 @@ interface NavBarProps {
   isAuthenticated: boolean;
   onLogout: () => void;
   setIsAuthenticated: (value: boolean) => void;
-  profileImageUrl: string; // Recibir la URL de la imagen de perfil
-  notificationCount: number; // Recibir el contador de notificaciones
+  profileImageUrl: string; 
+  notificationCount: number; 
 }
 
 const NavBar: React.FC<NavBarProps> = ({ isAuthenticated, setIsAuthenticated, onLogout, profileImageUrl, notificationCount }) => {
@@ -121,7 +121,7 @@ const NavBar: React.FC<NavBarProps> = ({ isAuthenticated, setIsAuthenticated, on
             {isAuthenticated ? (
               <>
                 <li>
-                  <ProfileButton profileImageUrl={profileImageUrl} notificationCount={notificationCount} /> {/* Pasar la imagen de perfil */}
+                  <ProfileButton profileImageUrl={profileImageUrl} notificationCount={notificationCount} /> 
                 </li>
                 <li>
                   <button

@@ -14,8 +14,8 @@ interface ForumCardProps {
 
 const ForumCard: React.FC<ForumCardProps> = ({ username, comment_text, email, comment_date, profile_image,comment_time }) => {
   return (
-    <div className="transform hover:scale-105 transition duration-300 forum-card  bg-white/75 border rounded p-4 shadow-md flex">
-      {/* Sección de la imagen */}
+    <div className=" bg-white/75 border rounded p-4 shadow-md flex">
+     
       <div className="flex-shrink-0 w-1/4 flex items-center justify-center">
         <img
           src={profile_image}
@@ -24,12 +24,14 @@ const ForumCard: React.FC<ForumCardProps> = ({ username, comment_text, email, co
         />
       </div>
 
-      {/* Sección del contenido */}
+   
       <div className="ml-4 w-3/4">
         <h2 className="text-xl font-bold">{email}</h2>
-        <p className="text-gray-600">{comment_text}</p>
-        <div className="text-sm text-gray-500">
-          <span>Autor: {username}</span> | <span>Creado: {comment_date}  {comment_time}</span>
+        <p className="w-400 h-100 p-5 bg-white rounded-lg text-gray-600">{comment_text}</p>
+        <div className="flex flex-col mt-4 text-sm text-gray-500 space-y-2">
+          <span>Autor: {username}</span>
+          <span>Creado: {comment_date}</span>
+          <span>{comment_time}</span>
         </div>
       </div>
     </div>

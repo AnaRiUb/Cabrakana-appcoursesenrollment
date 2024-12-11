@@ -2,11 +2,11 @@ import React from 'react';
 import { useNavigate } from 'react-router-dom';
 
 interface ProfilePageProps {
-  userAvatar: string; // URL del avatar del usuario
-  userName: string; // Nombre del usuario
-  userDescription: string; // Descripción del usuario
-  userAge: number; // Edad del usuario
-  isAgeVisible: boolean; // Si la edad es visible
+  userAvatar: string; 
+  userName: string; 
+  userDescription: string; 
+  userAge: number;
+  isAgeVisible: boolean;
 }
 
 const ProfilePage: React.FC<ProfilePageProps> = ({
@@ -18,9 +18,9 @@ const ProfilePage: React.FC<ProfilePageProps> = ({
 }) => {
   const navigate = useNavigate();
 
-  // Navegar a la página de edición del perfil
+ 
   const handleEditProfile = () => {
-    navigate('/edit-profile'); // Cambia esta ruta según la configuración de tu app
+    navigate('/edit-profile');
   };
 
   return (

@@ -6,7 +6,6 @@ const EditProfileForm: React.FC = () => {
   
   const handleSubmit = (event: React.FormEvent) => {
     event.preventDefault();
-    // Aquí puedes agregar la lógica para actualizar el perfil
     console.log('Datos actualizados:', { name, email });
   };
 

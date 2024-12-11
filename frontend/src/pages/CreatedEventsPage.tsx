@@ -11,7 +11,7 @@ interface Event {
   location: string;
   lat: number;
   lng: number;
-  status?: string; // Nuevo campo para estado del evento (activo, cancelado)
+  status?: string; 
 }
 
 const CreatedEventsPage: React.FC = () => {
@@ -30,7 +30,7 @@ const CreatedEventsPage: React.FC = () => {
             ...event,
             lat: parseFloat(event.latitude),
             lng: parseFloat(event.longitude),
-            status: event.status || "activo", // Agregar estado si no existe
+            status: event.status || "activo", 
           }));
 
           setEvents(parsedEvents);
@@ -45,7 +45,6 @@ const CreatedEventsPage: React.FC = () => {
     }
   }, [userId]);
 
-  // Eliminar evento
   const deleteEvent = async (eventId: string) => {
     try {
       const response = await fetch(`http://localhost:4000/events/${eventId}`, {
@@ -61,11 +60,10 @@ const CreatedEventsPage: React.FC = () => {
     }
   };
 
-  // Cancelar evento
   const cancelEvent = async (eventId: string) => {
     try {
       const response = await fetch(`http://localhost:4000/events/cancel/${eventId}`, {
-        method: "PUT", // Usamos PUT para actualizar el estado
+        method: "PUT", 
         headers: {
           "Content-Type": "application/json",
         },
@@ -86,9 +84,9 @@ const CreatedEventsPage: React.FC = () => {
     }
   };
 
-  // Editar evento (abre una interfaz para editar el evento)
+  
   const editEvent = (event: Event) => {
-    // Aquí puedes abrir un formulario o modal para editar el evento
+
     console.log("Editar evento:", event);
   };
 

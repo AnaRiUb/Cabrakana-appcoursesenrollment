@@ -7,17 +7,16 @@ interface MyToken {
   name: string;
   token: string;
   email:string;
-  // whatever else is in the JWT.
 }
 const GoogleLoginButton: React.FC = () => {
-  const { login } = useAuth();  // Para manejar el login en el contexto
-  const navigate = useNavigate();  // Para redirigir después de la autenticación
+  const { login } = useAuth(); 
+  const navigate = useNavigate(); 
 
   const handleGoogleLoginSuccess = async (response: any) => {
     const token = response.credential;
     if (token) {
       try {
-        // Llamada al backend con el token de Google
+        
         const backendResponse = await fetch('http://localhost:4000/api/auth/google', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
@@ -27,8 +26,8 @@ const GoogleLoginButton: React.FC = () => {
         const data = await backendResponse.json();
         
         if (backendResponse.ok) {
-          // Si la respuesta es positiva, se guarda el token recibido
-          login(data.token);  // Guardamos el token en el contexto de autenticación
+          
+          login(data.token); 
           console.log(data.token);
 
           console.log(data);
@@ -40,10 +39,10 @@ const GoogleLoginButton: React.FC = () => {
           localStorage.setItem('userToken', JSON.stringify(decoded2));
           
           console.log('Usuario decodificado:', decoded2.email);
-          // Redirige a la página de inicio
+ 
           navigate('/');
 
-          //Hora de hacer un post con fetch
+       
           try {
             const response = await fetch("http://localhost:4000/users/"+ decoded2.email , {
               method: "GET",

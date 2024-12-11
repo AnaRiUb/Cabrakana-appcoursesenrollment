@@ -8,8 +8,8 @@ const useFetch = (url: string) => {
   useEffect(() => {
     const fetchData = async () => {
       setLoading(true);
-      setError(null); // Resetear el error al iniciar una nueva solicitud
-
+      setError(null); 
+      
       try {
         const response = await fetch(url);
         
@@ -20,7 +20,7 @@ const useFetch = (url: string) => {
         const result = await response.json();
         setData(result);
       } catch (err) {
-        // Verifica si err es un objeto con un mensaje
+        
         if (err instanceof Error) {
           setError(err.message);
         } else {

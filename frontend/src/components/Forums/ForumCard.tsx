@@ -5,7 +5,7 @@ interface ForumCardProps {
   description: string;
   author: string;
   createdAt: string;
-  image: string; // Nueva propiedad para la imagen
+  image: string; 
   onClick?: () => void;
 }
 
