@@ -110,6 +110,7 @@ const MyCreatedEventButton: React.FC<MyCreatedEventButtonProps> = ({ onCreate, u
         longitude: lng,
         created_by: user_id,
       };
+      const apiUrl = process.env.REACT_APP_API_URL;
 
       const createEventResponse = await fetch(`http://${apiUrl}/events`, {
         method: "POST",
