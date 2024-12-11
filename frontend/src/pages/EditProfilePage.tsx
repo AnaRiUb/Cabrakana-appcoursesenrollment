@@ -1,19 +1,18 @@
-import React, { useState } from 'react';
-
+import React, { useState, useEffect } from 'react';
 
 interface EditProfilePageProps {
-  userAvatar: string; // URL actual del avatar
-  userGender: string; // Sexo actual del usuario
-  userDescription: string; // Descripción del usuario
-  userAge: number; // Edad del usuario
-  isAgeVisible: boolean; // Visibilidad de la edad
+  userAvatar: string;
+  userGender: string;
+  userDescription: string;
+  userAge: number;
+  isAgeVisible: boolean;
   onUpdateProfile: (
     newAvatar: string,
     newGender: string,
     newDescription: string,
     newAge: number,
     isAgeVisible: boolean
-  ) => void; // Función para actualizar
+  ) => void;
 }
 
 const EditProfilePage: React.FC<EditProfilePageProps> = ({
@@ -29,57 +28,71 @@ const EditProfilePage: React.FC<EditProfilePageProps> = ({
   const [newDescription, setNewDescription] = useState<string>(userDescription);
   const [newAge, setNewAge] = useState<number>(userAge);
   const [ageVisible, setAgeVisible] = useState<boolean>(isAgeVisible);
+ const user_id = 'd1c066d5-9c9a-4f8d-ae28-bb3a6452ea10';
+  useEffect(() => {
+    // Inicializar la imagen según el género cuando se carga el componente
+    if (newGender === 'hombre') {
+      setNewAvatar('https://res.cloudinary.com/dyg2tq33j/image/upload/v1733872516/ednqgmor7rpybo7werke.svg');
+    } else if (newGender === 'mujer') {
+      setNewAvatar('https://res.cloudinary.com/dyg2tq33j/image/upload/v1733872553/ff1hg1ootyzk1o001zrb.svg');
+    } else if (newGender === 'prefiero no decirlo') {
+      setNewAvatar('https://res.cloudinary.com/dyg2tq33j/image/upload/v1733872575/or828hsidnlszsaujkjl.svg');
+    }
+  }, [newGender]);
 
-  // Función para cambiar automáticamente la imagen según el género
   const handleGenderChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const selectedGender = event.target.value;
     setNewGender(selectedGender);
-
-    if (selectedGender === 'hombre') {
-      setNewAvatar('svg/boyicon.svg');
-    } else if (selectedGender === 'mujer') {
-      setNewAvatar('svg/girlicon.svg');
-    } else if (selectedGender === 'prefiero no decirlo') {
-      setNewAvatar('svg/nottellingicon.svg');
-    }
   };
 
-  const handleAvatarChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    if (event.target.files && event.target.files[0]) {
-      const file = event.target.files[0];
-      const reader = new FileReader();
-      reader.onload = () => {
-        setNewAvatar(reader.result as string); // Cambia la vista previa
-      };
-      reader.readAsDataURL(file);
-    }
-  };
-
-  const handleSubmit = (event: React.FormEvent) => {
+  const handleSubmit = async (event: React.FormEvent) => {
     event.preventDefault();
     onUpdateProfile(newAvatar, newGender, newDescription, newAge, ageVisible);
+
+    try {
+      const response = await fetch('http://localhost:4000/update-profile', {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          user_id,
+          newAvatar,
+          newGender,
+          newDescription,
+          newAge,
+          isAgeVisible,
+        }),
+      });
+
+      if (response.ok) {
+        const updatedUser = await response.json();
+       
+        alert('Perfil actualizado correctamente');
+      } else {
+        const errorData = await response.json();
+        alert(`Error: ${errorData.error}`);
+      }
+    } catch (error) {
+      console.error('Error al actualizar el perfil:', error);
+      alert('Hubo un error al actualizar el perfil');
+    }
     alert('Perfil actualizado correctamente');
   };
 
   return (
     <div className="max-w-2xl mx-auto mt-10 bg-white shadow-lg p-6 rounded-lg">
       <h2 className="text-2xl font-bold mb-4">Editar Perfil</h2>
-      
+
       <form onSubmit={handleSubmit}>
         {/* Foto de Perfil */}
         <div className="mb-6">
           <label className="block text-m font-medium text-gray-700 mb-6">Foto de Perfil</label>
           <div className="flex flex-col items-center m-2 gap-2">
             <img
-              src="svg/nottellingicon.svg"
+              src={newAvatar}
               alt="Foto de perfil"
               className="w-20 h-auto rounded-full object-cover border mr-4"
-            />
-            <input
-              type="file"
-              accept="image/*"
-              onChange={handleAvatarChange}
-              className="border p-2 rounded-lg text-sm"
             />
           </div>
         </div>
@@ -145,7 +158,7 @@ const EditProfilePage: React.FC<EditProfilePageProps> = ({
           />
         </div>
 
-       <div className='flex flex-col items-center'>
+        <div className="flex flex-col items-center">
           <div className="mb-6">
             <input
               type="checkbox"
@@ -156,16 +169,13 @@ const EditProfilePage: React.FC<EditProfilePageProps> = ({
             <label className="text-sm text-gray-700">¿Mostrar mi edad en el perfil?</label>
           </div>
 
-          {/* Botón Guardar */}
           <button
             type="submit"
-            className=" bg-pink-500 text-white px-4 py-2 rounded-full hover:bg-green-600 transition duration-200"
+            className="bg-pink-500 text-white px-4 py-2 rounded-full hover:bg-green-600 transition duration-200"
           >
             Guardar Cambios
           </button>
-      
-      </div>
-
+        </div>
       </form>
     </div>
   );

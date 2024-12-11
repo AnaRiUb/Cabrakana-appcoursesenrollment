@@ -7,7 +7,36 @@ import { createCourse, createEvent, createEventFollower, createForum, createForu
 ;
 
 
+export const updateUserProfileHandler = async (req: Request, res: Response) => {
+  const { user_id, newAvatar, newGender, newDescription, newAge, isAgeVisible } = req.body;
 
+  try {
+    // Validar los datos antes de continuar
+    if (!user_id) {
+      return res.status(400).json({ error: 'Falta el ID de usuario' });
+    }
+
+    // Actualizar los datos del usuario en la base de datos
+    const updatedUser = await prisma.user.update({
+      where: { user_id: user_id },
+      data: {
+        profile_image: newAvatar , // Si no hay nueva imagen, no se actualiza
+        gender: newGender || undefined, // Si no hay nuevo género, no se actualiza
+        description: newDescription || undefined, // Si no hay nueva descripción, no se actualiza
+        age: newAge || undefined, // Si no hay nueva edad, no se actualiza
+        age_visible: isAgeVisible, // Se actualiza la visibilidad de la edad
+      },
+    });
+
+    res.status(200).json({
+      message: 'Perfil actualizado correctamente',
+      user: updatedUser,
+    });
+  } catch (error) {
+    console.error('Error actualizando el perfil:', error);
+    res.status(500).json({ error: 'Error interno al actualizar el perfil' });
+  }
+};
 
 // Handler para guardar eventos seguidos 
 export const createFollowedEventHandler = async (req: express.Request, res: express.Response) => {

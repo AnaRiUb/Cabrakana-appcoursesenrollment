@@ -55,6 +55,9 @@ const GoogleLoginButton: React.FC = () => {
       
             const data = await response.json();
             localStorage.setItem('user_id', data.user_id);
+            localStorage.setItem('profile_image', data.profile_image);
+            localStorage.setItem('gender', data.gender);
+            localStorage.setItem('description', data.description);
           console.log(data.user_id);
           } catch (error) {
             console.error("Error al traer el user:", error);

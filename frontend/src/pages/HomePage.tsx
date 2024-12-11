@@ -7,18 +7,20 @@ const HomePage: React.FC = () => {
   const { token } = useAuth();
   
   type GenderType = 'Hombre' | 'Mujer' | 'Prefiero no decirlo' |  null;
-  const [gender, setGender] = useState<GenderType>(null);
+  const [gender, setGender] = useState<string>("");
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [userName, setUserName] = useState<string>("Usuario");
 
   useEffect(() => {
     try {
       const userToken = localStorage.getItem('userToken');
+      const genders = localStorage.getItem('gender');
+      
       if (userToken) {
         const parsedToken = JSON.parse(userToken);
         setIsAuthenticated(true);
         setUserName(parsedToken.name || 'Usuario');
-        setGender(parsedToken.gender || null);
+        setGender(genders!);
       }
     } catch (error) {
       console.error('Error al leer el token del localStorage:', error);
@@ -26,7 +28,7 @@ const HomePage: React.FC = () => {
   }, []);
 
   return (
-    <div className="bg-gray-50 min-h-screen p-6">
+    <div className="max-w-6xl mx-auto mt-0 bg-gray-50 min-h-screen p-6">
       {/* Mostrar contenido basado en si el usuario está autenticado */}
 
       {!isAuthenticated && (

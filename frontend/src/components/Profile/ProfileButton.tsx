@@ -3,13 +3,11 @@ import { Link } from 'react-router-dom';
 import NotificationBadge from '../Common/NotificationBadge';
 
 interface ProfileButtonProps {
-  onLogout?: () => void;
-  profileImageUrl: string; // URL de la imagen de perfil
-  notificationCount: number; // Número de notificaciones
+  profileImageUrl: string;
+  notificationCount: number;
 }
 
 const ProfileButton: React.FC<ProfileButtonProps> = ({
-  onLogout,
   profileImageUrl,
   notificationCount,
 }) => {
@@ -25,26 +23,16 @@ const ProfileButton: React.FC<ProfileButtonProps> = ({
           />
         </Link>
         {/* Badge */}
-        <NotificationBadge count={10000} />
+        <NotificationBadge count={notificationCount} />
       </div>
 
       {/* Botón Mi Perfil */}
       <Link
         to="/profile"
-        className="bg-pink-200/75 p-2 m-2 rounded-full shadow-sm text-center hover:bg-pink-200 cursor-pointer"
+        className="bg-pink-200 w-40 p-2 m-2 rounded-full shadow-sm text-center hover:bg-pink-200 cursor-pointer"
       >
         Mi Perfil
       </Link>
-
-      {/* Botón de cerrar sesión */}
-      {onLogout && (
-        <button
-          onClick={onLogout}
-          className="bg-pink-200/75 p-2 m-2 rounded-full shadow-sm text-center hover:bg-pink-200 cursor-pointer"
-        >
-          Cerrar sesión :P
-        </button>
-      )}
     </div>
   );
 };

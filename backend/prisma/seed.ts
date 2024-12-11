@@ -11,6 +11,9 @@ async function main() {
       password: 'hashed_password', // Asegúrate de que la contraseña esté correctamente cifrada
       gender: 'Hombre',
       profile_image: 'profile_image.png',
+      description: 'mi descripcion',
+      age: 20,
+      age_visible: true,
     },
   });
 

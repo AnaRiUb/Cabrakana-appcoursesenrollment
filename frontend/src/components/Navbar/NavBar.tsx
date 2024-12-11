@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import ProfileButton from '../Profile/ProfileButton';
 import ButtonHome from './ButtonHome';
 
@@ -7,26 +7,18 @@ interface NavBarProps {
   isAuthenticated: boolean;
   onLogout: () => void;
   setIsAuthenticated: (value: boolean) => void;
+  profileImageUrl: string; // Recibir la URL de la imagen de perfil
+  notificationCount: number; // Recibir el contador de notificaciones
 }
 
-const NavBar: React.FC<NavBarProps> = ({ isAuthenticated, setIsAuthenticated }) => {
+const NavBar: React.FC<NavBarProps> = ({ isAuthenticated, setIsAuthenticated, onLogout, profileImageUrl, notificationCount }) => {
   const [isOpen, setIsOpen] = useState(false);
-  const navigate = useNavigate();
-
   const toggleMenu = () => {
     setIsOpen(!isOpen);
   };
 
-  const handleLogout = () => {
-    localStorage.removeItem('userToken');
-    setIsAuthenticated(false);
-    navigate('/');
-  };
-
   return (
-
     <nav className="flex justify-center items-center p-4 bg-white text-[#ee076d] max-w-6xl mx-auto mt-8 font-bold border-b-[14px] border-r-[14px] border-black">
-     
       {/* Versión escritorio */}
       <div className="hidden md:flex w-full justify-between items-center">
         <div className="flex items-center gap-2">
@@ -60,12 +52,12 @@ const NavBar: React.FC<NavBarProps> = ({ isAuthenticated, setIsAuthenticated }) 
           {isAuthenticated ? (
             <>
               <li className="flex items-center">
-                <ProfileButton profileImageUrl="" notificationCount={20} />
+                <ProfileButton profileImageUrl={profileImageUrl} notificationCount={notificationCount} /> {/* Pasar la imagen de perfil */}
               </li>
               <li>
                 <button
                   className="bg-pink-200 rounded-full p-4 font-bold shadow-md"
-                  onClick={handleLogout}
+                  onClick={onLogout}
                 >
                   Cerrar Sesión
                 </button>
@@ -88,8 +80,6 @@ const NavBar: React.FC<NavBarProps> = ({ isAuthenticated, setIsAuthenticated }) 
         </ul>
       </div>
 
-     
-     
       {/* Versión móvil */}
       <div className="flex md:hidden w-full justify-between items-center">
         <button
@@ -125,19 +115,19 @@ const NavBar: React.FC<NavBarProps> = ({ isAuthenticated, setIsAuthenticated }) 
           <ul className="flex flex-col list-none mt-8 space-y-4 text-lg">
             <li>
               <Link className="text-white hover:text-[#ffa500] no-underline" to="/" onClick={toggleMenu}>
-                Piwis XD
+                Piwis
               </Link>
             </li>
             {isAuthenticated ? (
               <>
                 <li>
-                  <ProfileButton profileImageUrl="" notificationCount={0} />
+                  <ProfileButton profileImageUrl={profileImageUrl} notificationCount={notificationCount} /> {/* Pasar la imagen de perfil */}
                 </li>
                 <li>
                   <button
                     className="bg-pink-400 rounded-full m-4 p-4 font-bold shadow-md"
                     onClick={() => {
-                      handleLogout();
+                      onLogout();
                       toggleMenu();
                     }}
                   >
@@ -149,12 +139,12 @@ const NavBar: React.FC<NavBarProps> = ({ isAuthenticated, setIsAuthenticated }) 
               <>
                 <li>
                   <Link className="text-white hover:text-[#ffa500] no-underline" to="/login" onClick={toggleMenu}>
-                    Iniciar Sesión XD
+                    Iniciar Sesión
                   </Link>
                 </li>
                 <li>
                   <Link className="text-white hover:text-[#ffa500] no-underline" to="/signup" onClick={toggleMenu}>
-                    Registrarse XD
+                    Registrarse
                   </Link>
                 </li>
               </>
