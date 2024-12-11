@@ -60,7 +60,7 @@ const App: React.FC = () => {
     
     const user_id = localStorage.getItem('user_id');
   
-
+    const apiUrl = process.env.REACT_APP_API_URL;
     console.log("Imagen de perfil actualizada:", newAvatar);  
 
     console.log('Perfil actualizado:', {
@@ -73,7 +73,7 @@ const App: React.FC = () => {
 
     if (user_id) {
       try {
-        const response = await fetch('http://localhost:4000/update-profile', {
+        const response = await fetch(`http://${apiUrl}/update-profile`, {
           method: 'PUT',
           headers: {
             'Content-Type': 'application/json',

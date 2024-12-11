@@ -1,4 +1,4 @@
-const BASE_URL = process.env.REACT_APP_API_URL || 'http://localhost:5000';
+const BASE_URL = process.env.REACT_APP_API_URL || 'sv-okqeu9h5xb.cloud.elastika.pe:4000';
 
 export const fetchData = async (endpoint: string, options = {}) => {
   const response = await fetch(`${BASE_URL}${endpoint}`, options);
